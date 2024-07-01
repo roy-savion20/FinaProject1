@@ -12,8 +12,7 @@ import GeminiChat from './GeminiChat';
 export default function HomePage() {
   return (
     <SafeAreaView>
-      <GeminiChat/>
-      <FlashMessage position={"top"} />
+      <NavBar/>
     </SafeAreaView>
 );
 }
