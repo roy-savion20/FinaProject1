@@ -13,33 +13,35 @@ import SignUpTrainer from './components/SignUpTrainer';
 import Payment from './components/Payment';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomePage from './screens/HomePage';
-
+import TrainerContextProvider from './context/TrainerContextProvider';
 
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-export default function StackNav() {
+export function StackNav() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Bording1'component={Bording1} options={{headerShown : false}}/>
-      <Stack.Screen name='Bording2'component={Bording2} options={{headerShown : false}}/>
-      <Stack.Screen name='SignUpCostumer'component={SignUpCostumer} options={{headerShown : false}}/>
-      <Stack.Screen name='SignUpTrainer'component={SignUpTrainer} options={{headerShown : false}}/>
-      <Stack.Screen name='Payment'component={Payment} options={{headerShown : false}}/>
-      <Stack.Screen name='HomePage'component={HomePage} options={{headerShown : false}}/>
+      <Stack.Screen name='Bording1' component={Bording1} options={{ headerShown: false }} />
+      <Stack.Screen name='Bording2' component={Bording2} options={{ headerShown: false }} />
+      <Stack.Screen name='SignUpCostumer' component={SignUpCostumer} options={{ headerShown: false }} />
+      <Stack.Screen name='SignUpTrainer' component={SignUpTrainer} options={{ headerShown: false }} />
+      <Stack.Screen name='Payment' component={Payment} options={{ headerShown: false }} />
+      <Stack.Screen name='HomePage' component={HomePage} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
 
 
 
-export default function App(){
-  return(
+export default function App() {
+  return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name='StackNav' component={StackNav} options={{ tabBarButton: () => null }}/>
-      </Tab.Navigator>
+      <TrainerContextProvider>
+        <Tab.Navigator>
+          <Tab.Screen name='StackNav' component={StackNav} options={{ tabBarButton: () => null }} />
+        </Tab.Navigator>
+      </TrainerContextProvider>
     </NavigationContainer>
   )
 }

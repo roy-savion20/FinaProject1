@@ -1,0 +1,26 @@
+[
+    {
+        "name": "string",
+        "email": "string",
+        "location": "string",
+        "password": "string",
+        "experiance": "string",
+        "payment": {
+            "card": "string",
+            "date": "string",
+            "ccv": "number"
+        }
+    },
+    {
+        "name": "string2",
+        "email": "string2",
+        "location": "string2",
+        "password": "string2",
+        "experiance": "string2",
+        "payment": {
+            "card": "string2",
+            "date": "string2",
+            "ccv": "number2"
+        }
+    }
+]

@@ -23,7 +23,7 @@ export default function NavBar() {
         />
         <Tab.Screen name='Settings' component={Settings} 
         options={{tabBarLabel: 'Settings',
-            tabBarIcon: () => <MaterialCommunityIcons name='setting' size={35} color='rgba(255,159,71,1)'/>
+            tabBarIcon: () => <MaterialCommunityIcons name='account-cog' size={35} color='rgba(255,159,71,1)'/>
         }}
         />
     </Tab.Navigator>
