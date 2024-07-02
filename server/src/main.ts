@@ -19,7 +19,7 @@ server.use(cors()); //רשימת הכתובות שיכולות לגשת לשרת
 //שימוש בקבצים סטטיים - בהמשך
 
 //routes אפשרויות הניווט השונות
-server.use('/api/users', TrainerRouter);
+server.use('/api/trainer', TrainerRouter);
 
 //הפעלת השרת
 server.listen(PORT, () => { console.log(`[SERVER] running... http://localhost:${PORT}`) })

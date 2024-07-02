@@ -52,9 +52,10 @@ export async function registerUser(user: User) {
     }
 }
 
-export async function updateUser(id: string, email: string, location: string, password: any) {
+export async function updateUser(id: string, email: string, password: string, location: any) {
     try {
-        let user: User = { email, location, _id: new ObjectId(id),password }
+        let user: User = { email, password, _id : new ObjectId(id),location }
+        console.log(user)
         return await updateDoc(user);
     } catch (error) {
         throw error;

@@ -17,7 +17,6 @@ export async function getAll(req: Request, res: Response) {
 
 export async function getUserById(req: Request, res: Response) {
     let { id } = req.params; //url שליפת הפרמטר מתוך ה 
-
     if (id.length != 24)
         return res.status(500).json({ message: 'must provide a valid id' });
     try {
