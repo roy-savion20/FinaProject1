@@ -3,13 +3,16 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import { Formik } from 'formik';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFormik } from 'formik';
 import { TrainerContext } from '../context/TrainerContextProvider';
+import { TrainerType } from '../types/trainer_type';
 
-export default function Payment() {
-  const { AddPaymentInfoTrainer,addTrainer } = useContext(TrainerContext);
+export default function Payment(TrainerInfo: Partial<TrainerType>) {
+  const { AddPaymentInfoTrainer, addTrainer } = useContext(TrainerContext);
   const navigation = useNavigation();
+  const route = useRoute();
+  console.log('route', route)
   const [isFocus, setIsFocus] = useState(false);
   const [value, setValue] = useState('');
   const data = [
@@ -34,135 +37,157 @@ export default function Payment() {
     { label: '11', value: '11' },
     { label: '12', value: '12' },
   ];
+  // <Formik
+  //   initialValues={{
+  //     card: '',
+  //     date: '',
+  //     ccv: '', 
+  //   }}
+  //   validate={(values) => {
+  //     const errors: any = {};
+  //     if (!values.card) errors.card = 'Required';
+  //     if (!values.date) errors.date = 'Required';
+  //     if (!values.ccv) errors.ccv = 'Required';
+  //     return errors;
+  //   }}
+  //   onSubmit={(values, { resetForm }) => {
+  //     resetForm ();
+  //     navigation.navigate('TabNav');
 
+  //   }}
+  // >
+
+  const formik = useFormik({
+    initialValues: {
+      payment: {
+        card: '',
+        date: '',
+        ccv: '',
+      }
+    },
+    validate: (values) => {
+      const errors: any = {};
+      if (!values.payment.card) errors.card = 'Required';
+      if (!values.payment.date) errors.date = 'Required';
+      if (!values.payment.ccv) errors.ccv = 'Required';
+      return errors;
+    },
+    onSubmit: (values, { resetForm }) => {
+      const success: Partial<TrainerType> = (values as Partial<TrainerType>);
+      resetForm();
+      if (success.payment?.card) {
+        navigation.navigate('TabNav');
+      }
+    }
+  })
   return (
-    <SafeAreaView>
-      <Formik
-        initialValues={{
-          card: '',
-          date: '',
-          ccv: '', 
-        }}
-        validate={(values) => {
-          const errors: any = {};
-          if (!values.card) errors.card = 'Required';
-          if (!values.date) errors.date = 'Required';
-          if (!values.ccv) errors.ccv = 'Required';
-          return errors;
-        }}
-        onSubmit={(values, { resetForm }) => {
-          resetForm ();
-          navigation.navigate('TabNav');
-
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <>
-            <View>
-              <Image
-                source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s' }}
-                style={styles.mainImage}
-              />
-            </View>
-            <View>
-              <Text style={styles.textTitle}>Choose Your Payment Method</Text>
-            </View>
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Your Card Number"
-                onChangeText={handleChange('card')}
-                onBlur={handleBlur('card')}
-                value={values.card}
-              />
-              {errors.card && touched.card && <Text style={styles.error}>{errors.card}</Text>}
-              <View style={styles.datecontainer}>
-                <Dropdown
-                  style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={data}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isFocus ? 'Year' : '...'}
-                  searchPlaceholder="Search..."
-                  value={values.date}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={(item) => {
-                    handleChange('date')(item.value);
-                    setIsFocus(false);
-                  }}
-                  renderLeftIcon={() => (
-                    <AntDesign
-                      style={styles.icon}
-                      color={isFocus ? 'blue' : 'black'}
-                      name="Safety"
-                      size={20}
-                    />
-                  )}
+    <>
+      <SafeAreaView>
+        <View>
+          <Image
+            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s' }}
+            style={styles.mainImage}
+          />
+        </View>
+        <View>
+          <Text style={styles.textTitle}>Choose Your Payment Method</Text>
+        </View>
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Your Card Number"
+            onChangeText={formik.handleChange('payment.card')}
+            onBlur={formik.handleBlur('payment.card')}
+            value={formik.values.payment.card}
+          />
+          {formik.errors.payment?.card && formik.touched.payment?.card && <Text style={styles.error}>{formik.errors.payment.card}</Text>}
+          <View style={styles.datecontainer}>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Year' : '...'}
+              searchPlaceholder="Search..."
+              value={formik.values.payment?.date}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                // formik.handleChange('payment.date')(item.value);
+                formik.setFieldValue('payment.year', item.value);
+                setIsFocus(false);
+              }}
+              renderLeftIcon={() => (
+                <AntDesign
+                  style={styles.icon}
+                  color={isFocus ? 'blue' : 'black'}
+                  name="Safety"
+                  size={20}
                 />
-                <Dropdown
-                  style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={data1}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isFocus ? 'Month' : '...'}
-                  searchPlaceholder="Search..."
-                  value={values.date}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={(item) => {
-                    handleChange('date')(item.label + ' ' + item.value);
-                    setIsFocus(false);
-                  }}
-                  renderLeftIcon={() => (
-                    <AntDesign
-                      style={styles.icon}
-                      color={isFocus ? 'blue' : 'black'}
-                      name="Safety"
-                      size={20}
-                    />
-                  )}
+              )}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data1}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Month' : '...'}
+              searchPlaceholder="Search..."
+              value={formik.values.payment.date}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                // formik.handleChange('payment.date')(item.label + ' ' + item.value);
+                formik.setFieldValue('payment.month', item.value);
+                setIsFocus(false);
+              }}
+              renderLeftIcon={() => (
+                <AntDesign
+                  style={styles.icon}
+                  color={isFocus ? 'blue' : 'black'}
+                  name="Safety"
+                  size={20}
                 />
-              </View>
-            </View>
-            <View style={styles.ccv}>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Your CCV..."
-                onChangeText={handleChange('ccv')}
-                onBlur={handleBlur('ccv')}
-                value={values.ccv ? values.ccv.toString() : '0'}
-                keyboardType="numeric"
-              />
-              {errors.ccv && touched.ccv && <Text style={styles.error}>{errors.ccv}</Text>}
-            </View>
-            <View style={styles.buttonNext}>
-              <TouchableOpacity onPress={handleSubmit as any} style={styles.link}>
-                <Text style={styles.TextButton}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.dotcontainer}>
-              <View style={styles.dot1}></View>
-              <View style={styles.dot2}></View>
-              <View style={styles.dot3}></View>
-              <View style={styles.dot4}></View>
-            </View>
-          </>
-        )}
-      </Formik>
-    </SafeAreaView>
+              )}
+            />
+          </View>
+        </View>
+        <View style={styles.ccv}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Your CCV..."
+            onChangeText={formik.handleChange('payment.ccv')}
+            onBlur={formik.handleBlur('payment.ccv')}
+            value={formik.values.payment.ccv ? formik.values.payment.ccv.toString() : '0'}
+            keyboardType="numeric"
+          />
+          {formik.errors.payment?.ccv && formik.touched.payment?.ccv && <Text style={styles.error}>{formik.errors.payment.ccv}</Text>}
+        </View>
+        <View style={styles.buttonNext}>
+          <TouchableOpacity onPress={formik.handleSubmit} style={styles.link}>
+            <Text style={styles.TextButton}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.dotcontainer}>
+          <View style={styles.dot1}></View>
+          <View style={styles.dot2}></View>
+          <View style={styles.dot3}></View>
+          <View style={styles.dot4}></View>
+        </View>
+      </SafeAreaView >
+    </>
   );
 }
 
