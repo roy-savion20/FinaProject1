@@ -12,6 +12,9 @@ import Payment from './components/Payment';
 import HomePage from './screens/HomePage';
 import TrainerContextProvider from './context/TrainerContextProvider';
 import Profile from './screens/Profile';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import Chat from './components/Chat';
+import Settings from './screens/Settings';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -19,8 +22,18 @@ const Stack = createStackNavigator();
  function TabNav() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
-      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Tab.Screen name="HomePage" component={HomePage} options={{tabBarLabel: 'Home',
+            tabBarIcon: () => <MaterialCommunityIcons name='home' size={35} color='rgba(255,159,71,1)'/>
+        }} />
+      <Tab.Screen name="Profile" component={Profile}  options={{tabBarLabel: 'Profile',
+            tabBarIcon: () => <MaterialCommunityIcons name='account' size={35} color='rgba(255,159,71,1)'/>
+        }} />
+        <Tab.Screen name="Chat" component={Chat}  options={{tabBarLabel: 'Chat',
+            tabBarIcon: () => <MaterialCommunityIcons name='wechat' size={35} color='rgba(255,159,71,1)'/>
+        }} />
+          <Tab.Screen name="Settings" component={Settings}  options={{tabBarLabel: 'Settings',
+            tabBarIcon: () => <Feather name="settings" size={24} color="rgba(255,159,71,1)" />
+        }} />
     </Tab.Navigator>
   );
 }
@@ -33,7 +46,6 @@ function StackNav() {
       <Stack.Screen name="SignUpCostumer" component={SignUpCostumer} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpTrainer" component={SignUpTrainer} options={{ headerShown: false }} />
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
-      {/* <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} /> */}
       <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false }} />
     </Stack.Navigator>
   );

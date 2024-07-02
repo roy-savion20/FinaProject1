@@ -13,6 +13,7 @@ import * as Speech from "expo-speech";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import { ScrollView } from "react-native-gesture-handler";
 
 type Message = {
   text: string;
@@ -37,7 +38,7 @@ const GeminiChat = () => {
       const text = await response.text();
       console.log(text);
       showMessage({
-        message: 'Welcome to Gemini Chat 🤖',
+        message: 'Welcome to DogHouse AI',
         description: text,
         type: 'info',
         icon: 'info',
@@ -81,7 +82,8 @@ const GeminiChat = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.scroll}>
+          <View style={styles.container}>
       <FlatList
         data={messages}
         renderItem={renderMessage}
@@ -104,18 +106,19 @@ const GeminiChat = () => {
         )}
       </View>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "black",height: 'auto' },
+  container: { backgroundColor: "rgba(255,159,71,0.2)",height: 'auto' },
   messageContainer: { padding: 10, marginVertical: 5 },
   messageText: { fontSize: 16,color: 'white' },
   inputContainer: { flexDirection: "row", alignItems: "center", padding: 10 },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#131314",
+    backgroundColor: "rgba(255,159,71,1)",
     borderRadius: 10,
     height: 50,
     color: "white",
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
   },
   stopIcon: {
     padding: 10,
-    backgroundColor: "#131314",
+    backgroundColor: "red",
     borderRadius: 25,
     height: 50,
     width: 50,
@@ -141,8 +144,12 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   userMessage:{
-    color: 'black'
+    color: '#A5A5A5'
   },
+  scroll:{
+    backgroundColor:'rgba(255,159,71,0.2)',
+    height: '100%'
+  }
 });
 
 export default GeminiChat;

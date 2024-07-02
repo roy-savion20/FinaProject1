@@ -6,8 +6,8 @@ import GeminiChat from '../screens/GeminiChat'
 export default function Chat() {
   return (
     <View>
-            <GeminiChat/>
-            <FlashMessage position={"top"} />
+      <GeminiChat/>
+      <FlashMessage position={"top"} />
     </View>
   )
 }
