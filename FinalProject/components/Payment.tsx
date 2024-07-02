@@ -54,7 +54,7 @@ export default function Payment() {
           AddPaymentInfoTrainer(values);
           addTrainer()
           resetForm ();
-          navigation.navigate('HomePage');
+          navigation.navigate('TabNav');
 
         }}
       >

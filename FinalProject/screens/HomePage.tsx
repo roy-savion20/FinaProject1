@@ -12,7 +12,9 @@ import GeminiChat from './GeminiChat';
 export default function HomePage() {
   return (
     <SafeAreaView>
-      <NavBar/>
+      <View>
+        <Text>HOM</Text>
+      </View>
     </SafeAreaView>
 );
 }
