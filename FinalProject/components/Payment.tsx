@@ -52,7 +52,7 @@ export default function Payment() {
         }}
         onSubmit={(values, { resetForm }) => {
           resetForm ();
-          navigation.navigate('HomePage');
+          navigation.navigate('TabNav');
 
         }}
       >

@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import FlashMessage from 'react-native-flash-message'
+import GeminiChat from '../screens/GeminiChat'
 
 export default function Chat() {
   return (
     <View>
-      <Text>Chat</Text>
+            <GeminiChat/>
+            <FlashMessage position={"top"} />
     </View>
   )
 }
