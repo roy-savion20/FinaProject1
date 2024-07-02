@@ -1,10 +1,10 @@
 //ייבוא אובייקט 
 import { Router } from 'express';
-import { physicDeleteUser, getAll, getUserById, login, register, update, logicDeleteUser } from './user.controller';
+import { physicDeleteUser, getAll, getUserById, login, register, update, logicDeleteUser } from './trainer.controller';
 
-const userRoutes = Router();
+const TrainerRouter = Router();
 
-userRoutes
+TrainerRouter
     .get('/', getAll) //READ
     .get('/:id/', getUserById) //READ
     .post('/login', login) //READ
@@ -13,4 +13,4 @@ userRoutes
     .delete('/logic/delete/:id', logicDeleteUser) //DELETE
     .delete('/physic/delete/:id', physicDeleteUser) //DELETE
 
-export default userRoutes;
+export default TrainerRouter;

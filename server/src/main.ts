@@ -4,7 +4,7 @@ import cors from 'cors';
 
 //ייבוא את האקספרס
 import express from 'express';
-import userRoutes from './user/user.routes';
+import TrainerRouter from './Trainer/trainer.routes';
 
 //הגדרת הפורט
 const PORT = process.env.PORT || 7777;
@@ -19,7 +19,7 @@ server.use(cors()); //רשימת הכתובות שיכולות לגשת לשרת
 //שימוש בקבצים סטטיים - בהמשך
 
 //routes אפשרויות הניווט השונות
-server.use('/api/users', userRoutes);
+server.use('/api/users', TrainerRouter);
 
 //הפעלת השרת
 server.listen(PORT, () => { console.log(`[SERVER] running... http://localhost:${PORT}`) })
