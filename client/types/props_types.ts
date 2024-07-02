@@ -1,4 +1,4 @@
-import { TrainerType } from "../types/trainer_type";
+import { TrainerType } from "./trainer_type";
 export type AllTrainerProps={
     allTrainers:TrainerType[]
 }
