@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getAllUsers, findUserById, loginUser, registerUser, updateUser, deactiveUser, removeUser } from "./user.model";
-import { User } from "./user.type";
+import { getAllUsers, findUserById, loginUser, registerUser, updateUser, deactiveUser, removeUser } from "./trainer.model";
+import { User } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
 
 export async function getAll(req: Request, res: Response) {
@@ -17,7 +17,6 @@ export async function getAll(req: Request, res: Response) {
 
 export async function getUserById(req: Request, res: Response) {
     let { id } = req.params; //url שליפת הפרמטר מתוך ה 
-
     if (id.length != 24)
         return res.status(500).json({ message: 'must provide a valid id' });
     try {
@@ -52,14 +51,14 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function register(req: Request, res: Response) {
-    let { email, full_name, password } = req.body;
-    if (!email || !password || !full_name)
+    let { name,email,location,password,experiance,payment } = req.body;
+    if (!email || !password || !name || !location || !experiance || !payment)
         return res.status(400).json({ message: 'missing info' });
 
     try {
         //הפעלת הפונקציה להצפנת הסיסמה
         password = encryptPassword(password);
-        let user: User = { email, password, full_name }
+        let user: User = { name,email,location,password,experiance,payment }
         let result = await registerUser(user);
         if (!result.insertedId)
             res.status(400).json({ message: 'registration failed' });
@@ -74,16 +73,16 @@ export async function register(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
     let { id } = req.params;
-    let { email, full_name, grade } = req.body;
+    let { email, password, location } = req.body;
 
     if (!id || id.length < 24)
         return res.status(400).json({ message: 'must provide a valid id' });
 
-    if (!email || !full_name)
+    if (!email || !password)
         return res.status(400).json({ message: 'must provide an email and full_name' });
 
     try {
-        let result = await updateUser(id, email, full_name, grade);
+        let result = await updateUser(id, email, password, location);
         res.status(201).json({ result });
     } catch (error) {
         res.status(500).json({ error });

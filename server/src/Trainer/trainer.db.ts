@@ -1,10 +1,10 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { User } from "./user.type";
+import { User } from "./trainer.type";
 
 const DB_INFO = {
     connection: process.env.CONNECTION_STRING as string,
     name: process.env.DB_NAME,
-    collection: 'Users'
+    collection: 'Trainers'
 }
 
 /**
