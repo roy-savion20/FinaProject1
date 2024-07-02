@@ -51,8 +51,6 @@ export default function Payment() {
           return errors;
         }}
         onSubmit={(values, { resetForm }) => {
-          AddPaymentInfoTrainer(values);
-          addTrainer()
           resetForm ();
           navigation.navigate('HomePage');
 
