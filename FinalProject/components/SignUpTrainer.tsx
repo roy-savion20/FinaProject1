@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState, useContext } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
@@ -8,26 +8,17 @@ import { TrainerContext } from '../context/TrainerContextProvider';
 import { TrainerType } from '../types/trainer_type';
 import { Formik } from 'formik';
 
+
+
 export default function SignUpTrainer() {
   const navigation = useNavigation();
-  const context = useContext(TrainerContext);
-
-
-  const { AddInfoTrainer } = context;
+  const { AddTrainer } = useContext(TrainerContext);
   const [isFocus, setIsFocus] = useState(false);
-  const [visiblePassword, setVisiblePassword] = useState(false);
-  const data = [
-    { label: '0 - 2 years', value: '1' },
-    { label: '2 - 4 years', value: '2' },
-    { label: '4 - 6 years', value: '3' },
-    { label: '6 - 8 years', value: '4' },
-    { label: '8 - 10 years', value: '5' },
-    { label: '10 - 12 years', value: '6' },
-    { label: '12 + years', value: '7' }
-  ];
+  const [visibalePassword, setvisibalePassword] = useState(false);
+  const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
   const togglePasswordVisibility = () => {
-    setVisiblePassword(!visiblePassword);
+    setvisibalePassword(!visibalePassword);
   };
 
   return (
@@ -37,7 +28,7 @@ export default function SignUpTrainer() {
           name: '',
           email: '',
           location: '',
-          experience: '',
+          experiance: '',
           password: ''
         }}
         validate={(values) => {
@@ -45,12 +36,12 @@ export default function SignUpTrainer() {
           if (!values.name) errors.name = 'Required';
           if (!values.email) errors.email = 'Required';
           if (!values.location) errors.location = 'Required';
-          if (!values.experience) errors.experience = 'Required';
+          if (!values.experiance) errors.experiance = 'Required';
           if (!values.password) errors.password = 'Required';
           return errors;
         }}
         onSubmit={(values, { resetForm }) => {
-          const success = AddInfoTrainer(values as Partial<TrainerType>);
+          const success = AddTrainer(values as TrainerType);
           if (success) {
             resetForm();
             navigation.navigate('Payment');
@@ -79,15 +70,17 @@ export default function SignUpTrainer() {
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
-              secureTextEntry={!visiblePassword}
+              secureTextEntry={!visibalePassword}
+
             />
             {errors.password && touched.password && <Text style={styles.error}>{errors.password}</Text>}
+
             <TouchableOpacity
               style={styles.toggleButton}
               onPress={togglePasswordVisibility}
             >
               <Image
-                source={{ uri: visiblePassword ? 'https://icon2.cleanpng.com/20180424/pxq/kisspng-computer-icons-cross-eye-5adf65ca6e96c2.927735901524590026453.jpg' : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KjU4cWc-z6DWOwvoC06bAS_wA4MzgIQJiw&s' }}
+                source={{ uri: visibalePassword ? 'https://icon2.cleanpng.com/20180424/pxq/kisspng-computer-icons-cross-eye-5adf65ca6e96c2.927735901524590026453.jpg' : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KjU4cWc-z6DWOwvoC06bAS_wA4MzgIQJiw&s' }}
                 style={styles.check}
               />
             </TouchableOpacity>
@@ -99,6 +92,7 @@ export default function SignUpTrainer() {
               value={values.email}
             />
             {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
+
             <TextInput
               style={styles.input}
               placeholder="Enter Your Location"
@@ -120,11 +114,11 @@ export default function SignUpTrainer() {
               valueField="value"
               placeholder={!isFocus ? 'Experience' : '...'}
               searchPlaceholder="Search..."
-              value={values.experience}
+              value={values.experiance}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setFieldValue('experience', item.value);
+                setFieldValue('experiance', item.value);
                 setIsFocus(false);
               }}
               renderLeftIcon={() => (
@@ -136,7 +130,8 @@ export default function SignUpTrainer() {
                 />
               )}
             />
-            {errors.experience && touched.experience && <Text style={styles.error}>{errors.experience}</Text>}
+            {errors.experiance && touched.experiance && <Text style={styles.error}>{errors.experiance}</Text>}
+
             <View style={styles.buttonNext}>
               <TouchableOpacity onPress={handleSubmit as any} style={styles.link}>
                 <Text style={styles.TextButton}>Next</Text>
@@ -152,7 +147,7 @@ export default function SignUpTrainer() {
         )}
       </Formik>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
