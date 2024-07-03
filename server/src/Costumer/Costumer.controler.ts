@@ -1,0 +1,72 @@
+import { Request,Response } from "express";
+import { Costumer } from "./Costumer.type";
+import { decryptPassword, encryptPassword } from "../utils/utils";
+import { findcostumerbyID, getallcostumers1, logincost, regCostumer } from "./Costumer.model";
+
+export async function GetAllCostumrs(req: Request, res : Response) {
+    try {
+        let costumers = await getallcostumers1();
+        if(costumers?.length == 0)
+            res.status(200).json({ message: 'no costumers inside', costumers })
+        else
+            res.status(200).json({ costumers })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function getCostumerById(req : Request, res: Response) {
+    let { id } = req.params;
+    if(id.length != 24)
+        return res.status(500).json({message : 'most provide valid id'})
+    try {
+        let costumer = await findcostumerbyID(id)
+        if(!costumer)
+            res.status(400).json({ message: 'costumer not found' })
+        else
+            res.status(200).json({ costumer })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function LoginCostumer(req: Request, res: Response) {
+    let { email, password } = req.body;
+    //בדיקה - אם לא נשלחו אימייל וסיסמה תחזיר את ההודעה 
+    if (!email || !password)
+        return res.status(400).json({ message: 'invalid email or password' });
+    try {
+        let user = await logincost(email);
+        if (!user)
+            res.status(404).json({ message: 'user not found' });
+        //הפעלת הפונקציה לפענוח הסיסמה
+        else if (decryptPassword(password, user.password))
+            res.status(200).json({ user });
+        else
+            res.status(400).json({ message: 'invalid email or password' });
+        
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+}
+
+export async function RegisterCostumer(req : Request, res: Response) {
+    let { name , email , location , password , dogBreed, Payment } = req.body
+
+    if(!name || !password || !email)
+        return res.status(400).json({ message: 'mossing info' })
+    try {
+        password = encryptPassword(password);
+        let costumer : Costumer = { name , email , location , password , dogBreed, Payment }
+        let result = await regCostumer(costumer)
+        console.log(result)
+        if(!result.insertedId)
+            res.status(400).json({ message: 'registration faild' })
+        else{
+            costumer.id = result.insertedId;
+            res.status(201).json({ costumer }) 
+        }
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
