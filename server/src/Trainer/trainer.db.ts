@@ -81,25 +81,6 @@ export async function updateDoc(user: User) {
     }
 }
 
-export async function decativateUser(id: string) {
-    let mongo = new MongoClient(DB_INFO.connection);
-    try {
-        //התחברות למסד הנתונים
-        await mongo.connect();
-        //עדכון המשתמש
-        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
-            { _id: new ObjectId(id) },
-            { $set: { isActive: false } }
-        );
-
-    } catch (error) {
-        throw error;
-    }
-    finally {
-        //סגירת החיבור למסד הנתונים
-        mongo.close();
-    }
-}
 
 export async function deleteUser(id: string) {
     let mongo = new MongoClient(DB_INFO.connection);

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsers, findUserById, loginUser, registerUser, updateUser, deactiveUser, removeUser } from "./trainer.model";
+import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser } from "./trainer.model";
 import { User } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
 
@@ -103,17 +103,5 @@ export async function physicDeleteUser(req: Request, res: Response) {
     }
 }
 
-export async function logicDeleteUser(req: Request, res: Response) {
-    let { id } = req.params;
 
-    if (!id || id.length < 24)
-        return res.status(400).json({ message: 'must provide a valid id' });
-
-    try {
-        let result = await deactiveUser(id);
-        res.status(201).json({ result });
-    } catch (error) {
-        res.status(500).json({ error });
-    }
-}
 

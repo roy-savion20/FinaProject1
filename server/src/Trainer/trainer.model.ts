@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { checkIfDocumentExists, decativateUser, findUsers, insertUser, updateDoc, deleteUser } from "./trainer.db";
+import { checkIfDocumentExists, findUsers, insertUser, updateDoc, deleteUser } from "./trainer.db";
 import { User } from "./trainer.type";
 
 export async function getAllUsers() {
@@ -62,13 +62,7 @@ export async function updateUser(id: string, email: string, password: string, lo
     }
 }
 
-export async function deactiveUser(id: string) {
-    try {
-        return await decativateUser(id);
-    } catch (error) {
-        throw error;
-    }
-}
+
 
 export async function removeUser(id: string) {
     try {
