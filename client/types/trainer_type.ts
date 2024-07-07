@@ -1,9 +1,13 @@
 export type TrainerType = {
-    name: string,
+    first_name: string,
+    last_name: string,
     email: string,
-    location: string,
     password: string,
+    dob: Date,
+    location: string,
     experiance: string,
+    image: string,
+    phone: string,
     payment: {
         card: string,
         date: string,

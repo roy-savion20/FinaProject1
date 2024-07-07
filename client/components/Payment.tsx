@@ -6,13 +6,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import { TrainerContext } from '../context/TrainerContextProvider';
-import { TrainerType } from '../types/trainer_type';
 
-export default function Payment(TrainerInfo: Partial<TrainerType>) {
+export default function Payment(TrainerInfo: any) {
   const { AddPaymentInfoTrainer, addTrainer } = useContext(TrainerContext);
   const navigation = useNavigation();
   const route = useRoute();
-  console.log('route', route)
   const [isFocus, setIsFocus] = useState(false);
   const [value, setValue] = useState('');
   const data = [
@@ -25,61 +23,67 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
     { label: '2030', value: '2030' },
   ];
   const data1 = [
-    { label: '01', value: '1' },
-    { label: '02', value: '2' },
-    { label: '03', value: '3' },
-    { label: '04', value: '4' },
-    { label: '05', value: '5' },
-    { label: '06', value: '6' },
-    { label: '08', value: '8' },
-    { label: '09', value: '9' },
+    { label: '01', value: '01' },
+    { label: '02', value: '02' },
+    { label: '03', value: '03' },
+    { label: '04', value: '04' },
+    { label: '05', value: '05' },
+    { label: '06', value: '06' },
+    { label: '08', value: '08' },
+    { label: '09', value: '09' },
     { label: '10', value: '10' },
     { label: '11', value: '11' },
     { label: '12', value: '12' },
   ];
-  // <Formik
-  //   initialValues={{
-  //     card: '',
-  //     date: '',
-  //     ccv: '', 
-  //   }}
-  //   validate={(values) => {
-  //     const errors: any = {};
-  //     if (!values.card) errors.card = 'Required';
-  //     if (!values.date) errors.date = 'Required';
-  //     if (!values.ccv) errors.ccv = 'Required';
-  //     return errors;
-  //   }}
-  //   onSubmit={(values, { resetForm }) => {
-  //     resetForm ();
-  //     navigation.navigate('TabNav');
-
-  //   }}
-  // >
 
   const formik = useFormik({
     initialValues: {
-      payment: {
-        card: '',
-        date: '',
-        ccv: '',
-      }
+      card: '',
+      month: '',
+      year: '',
+      cvv: '',
     },
     validate: (values) => {
       const errors: any = {};
-      if (!values.payment.card) errors.card = 'Required';
-      if (!values.payment.date) errors.date = 'Required';
-      if (!values.payment.ccv) errors.ccv = 'Required';
+      if (!values.card) {
+        errors.card = 'Required';
+      } else if (!/^\d{16}$/.test(values.card)) {
+        errors.card = 'Card number must be 16 digits';
+      }
+
+      if (!values.month) {
+        errors.month = 'Required';
+      } else if (!/^(0[1-9]|1[0-2])$/.test(values.month)) {
+        errors.month = 'Month must be between 01 and 12';
+      }
+
+      if (!values.year) {
+        errors.year = 'Required';
+      } else if (!/^\d{4}$/.test(values.year)) {
+        errors.year = 'Year must be 4 digits';
+      }
+
+      if (!values.cvv) {
+        errors.cvv = 'Required';
+      } else if (!/^\d{3}$/.test(values.cvv)) {
+        errors.cvv = 'CVV must be 3 digits';
+      }
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      const success: Partial<TrainerType> = (values as Partial<TrainerType>);
+      const payment: any = {
+        card: values.card,
+        date: values.year + '-' + values.month,
+        cvv: values.cvv
+      }
+      console.log('TrainerInfo:', JSON.stringify(TrainerInfo, null, 2)); // Updated to display values
+      console.log('Payment info:', payment);
       resetForm();
-      if (success.payment?.card) {
+      if (payment.card) {
         navigation.navigate('TabNav');
       }
     }
-  })
+  });
   return (
     <>
       <SafeAreaView>
@@ -96,12 +100,14 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
           <TextInput
             style={styles.input}
             placeholder="Enter Your Card Number"
-            onChangeText={formik.handleChange('payment.card')}
-            onBlur={formik.handleBlur('payment.card')}
-            value={formik.values.payment.card}
+            onChangeText={formik.handleChange('card')}
+            onBlur={formik.handleBlur('card')}
+            value={formik.values.card}
           />
-          {formik.errors.payment?.card && formik.touched.payment?.card && <Text style={styles.error}>{formik.errors.payment.card}</Text>}
-          <View style={styles.datecontainer}>
+          {formik.errors.card && formik.touched.card ? <Text style={styles.error}>{formik.errors.card}</Text> : null}
+        </View>
+        <View style={styles.datecontainer}>
+          <View>
             <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -115,12 +121,11 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
               valueField="value"
               placeholder={!isFocus ? 'Year' : '...'}
               searchPlaceholder="Search..."
-              value={formik.values.payment?.date}
+              value={formik.values.year}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={(item) => {
-                // formik.handleChange('payment.date')(item.value);
-                formik.setFieldValue('payment.year', item.value);
+                formik.setFieldValue('year', item.value);
                 setIsFocus(false);
               }}
               renderLeftIcon={() => (
@@ -132,6 +137,11 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
                 />
               )}
             />
+            {formik.errors.year && formik.touched.year ?
+              <Text style={styles.error}>{formik.errors.year}</Text>
+              : null}
+          </View>
+          <View>
             <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -145,12 +155,11 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
               valueField="value"
               placeholder={!isFocus ? 'Month' : '...'}
               searchPlaceholder="Search..."
-              value={formik.values.payment.date}
+              value={formik.values.month}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={(item) => {
-                // formik.handleChange('payment.date')(item.label + ' ' + item.value);
-                formik.setFieldValue('payment.month', item.value);
+                formik.setFieldValue('month', item.value);
                 setIsFocus(false);
               }}
               renderLeftIcon={() => (
@@ -162,22 +171,27 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
                 />
               )}
             />
+            {formik.touched.month && formik.errors.month ?
+              <Text style={styles.error}>{formik.errors.month}</Text>
+              : null}
           </View>
         </View>
-        <View style={styles.ccv}>
+        <View style={styles.cvv}>
           <TextInput
             style={styles.input}
-            placeholder="Enter Your CCV..."
-            onChangeText={formik.handleChange('payment.ccv')}
-            onBlur={formik.handleBlur('payment.ccv')}
-            value={formik.values.payment.ccv ? formik.values.payment.ccv.toString() : '0'}
+            placeholder="Enter Your CVV..."
+            onChangeText={formik.handleChange('cvv')}
+            onBlur={formik.handleBlur('cvv')}
+            value={formik.values.cvv ? formik.values.cvv.toString() : ''}
             keyboardType="numeric"
           />
-          {formik.errors.payment?.ccv && formik.touched.payment?.ccv && <Text style={styles.error}>{formik.errors.payment.ccv}</Text>}
+          {formik.errors.cvv && formik.touched.cvv ? (
+            <Text style={styles.error}>{formik.errors.cvv}</Text>
+          ) : null}
         </View>
         <View style={styles.buttonNext}>
-          <TouchableOpacity onPress={formik.handleSubmit} style={styles.link}>
-            <Text style={styles.TextButton}>Sign Up</Text>
+          <TouchableOpacity onPress={() => formik.handleSubmit()} style={styles.link}>
+            <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.dotcontainer}>
@@ -186,7 +200,7 @@ export default function Payment(TrainerInfo: Partial<TrainerType>) {
           <View style={styles.dot3}></View>
           <View style={styles.dot4}></View>
         </View>
-      </SafeAreaView >
+      </SafeAreaView>
     </>
   );
 }
@@ -252,11 +266,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   datecontainer: {
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    
   },
-  ccv: {
-    marginTop: 80,
+  cvv: {
+    marginTop: 10,
   },
   buttonNext: {
     backgroundColor: 'rgba(255,159,71,0.4)',
@@ -309,6 +325,6 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     color: 'red',
+    textAlign: 'center',
   },
 });
-

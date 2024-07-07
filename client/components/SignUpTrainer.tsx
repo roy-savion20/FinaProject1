@@ -1,93 +1,152 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState, useContext } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { TrainerContext } from '../context/TrainerContextProvider';
-import { TrainerType } from '../types/trainer_type';
 import { useFormik } from 'formik';
-
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function SignUpTrainer() {
   const navigation = useNavigation();
   const { AddTrainer } = useContext(TrainerContext);
   const [isFocus, setIsFocus] = useState(false);
-  const [visiblePassword, setvisiblePassword] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
   const togglePasswordVisibility = () => {
-    setvisiblePassword(!visiblePassword);
+    setVisiblePassword(!visiblePassword);
   };
- 
+
   const formik = useFormik({
     initialValues: {
-      name: '',
+      first_name: '',
+      last_name: '',
       email: '',
+      password: '',
+      dob: '',
       location: '',
-      experiance: '',
-      password: ''
+      experience: '',
+      image: '',
+      phone: ''
     },
     validate: (values) => {
       const errors: any = {};
-      if (!values.name) errors.name = 'Required';
-      if (!values.email) errors.email = 'Required';
-      if (!values.location) errors.location = 'Required';
-      if (!values.experiance) errors.experiance = 'Required';
-      if (!values.password) errors.password = 'Required';
+      if (!values.first_name) {
+        errors.first_name = 'Required';
+      } else if (values.first_name.length < 2) {
+        errors.first_name = 'First name must be at least 2 characters';
+      }
+
+      if (!values.last_name) {
+        errors.last_name = 'Required';
+      } else if (values.last_name.length < 2) {
+        errors.last_name = 'Last name must be at least 2 characters';
+      }
+
+      if (!values.email) {
+        errors.email = 'Required';
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email format';
+      }
+
+      if (!values.password) {
+        errors.password = 'Required';
+      } else if (values.password.length < 8) {
+        errors.password = 'Password must be at least 8 characters';
+      }
+
+      if (!values.dob) {
+        errors.dob = 'Required';
+      } else {
+        const today = new Date();
+        const birthDate = new Date(values.dob);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        if (age < 18 || age > 100) {
+          errors.dob = 'Age must be between 18 and 100 years';
+        }
+      }
+
+      if (!values.location) {
+        errors.location = 'Required';
+      } else if (values.location.length < 2) {
+        errors.location = 'Location must be at least 2 characters';
+      }
+
+      if (!values.experience) {
+        errors.experience = 'Required';
+      } else if (isNaN(Number(values.experience))) {
+        errors.experience = 'Experience must be a number';
+      }
+
+      if (!values.image) {
+        errors.image = 'Required';
+      }
+
+      if (!values.phone) {
+        errors.phone = 'Required';
+      } else if (!/^\d{10}$/.test(values.phone)) {
+        errors.phone = 'Phone number must be 10 digits';
+      }
+
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      const success: Partial<TrainerType> = (values as Partial<TrainerType>);
-      console.log(success);
+      const TrainerInfo: any = values;
+      console.log(values);
       resetForm();
-      if (success.email) {
-        navigation.navigate("Payment", {success});
+      if (TrainerInfo.email !== '') {
+        navigation.navigate("Payment", { TrainerInfo});
       }
     }
-  })
+  });
+
+  const onDateChange = (event : Event, selectedDate: Date) => {
+    if (event.type === "set") {
+      const currentDate = selectedDate || new Date();
+      const formattedDate = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+      formik.setFieldValue('dob', formattedDate);
+    }
+    setShowDatePicker(false);
+  };
+
   return (
-    <>
-      <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View>
           <Image
             source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s' }}
             style={styles.mainImage}
           />
         </View>
+
         <TextInput
           style={styles.input}
-          placeholder="Enter Your Full Name"
-          onChangeText={formik.handleChange('name')}
-          onBlur={formik.handleBlur('name')}
-          value={formik.values.name}
+          placeholder="Enter Your First Name"
+          onChangeText={formik.handleChange('first_name')}
+          onBlur={formik.handleBlur('first_name')}
+          value={formik.values.first_name}
         />
-        {formik.touched.name && formik.errors.name ? (
-          <Text style={styles.error}>{formik.errors.name}</Text>
+        {formik.touched.first_name && formik.errors.first_name ? (
+          <Text style={styles.error}>{formik.errors.first_name}</Text>
         ) : null}
 
         <TextInput
           style={styles.input}
-          placeholder="Enter Your Password"
-          onChangeText={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          value={formik.values.password}
-          secureTextEntry={!visiblePassword}
+          placeholder="Enter Your Last Name"
+          onChangeText={formik.handleChange('last_name')}
+          onBlur={formik.handleBlur('last_name')}
+          value={formik.values.last_name}
         />
-        {formik.touched.password && formik.errors.password ? (
-          <Text style={styles.error}>{formik.errors.password}</Text>
+        {formik.touched.last_name && formik.errors.last_name ? (
+          <Text style={styles.error}>{formik.errors.last_name}</Text>
         ) : null}
-
-        <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
-        >
-          <Image
-            source={{ uri: visiblePassword ? 'https://icon2.cleanpng.com/20180424/pxq/kisspng-computer-icons-cross-eye-5adf65ca6e96c2.927735901524590026453.jpg' : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KjU4cWc-z6DWOwvoC06bAS_wA4MzgIQJiw&s' }}
-            style={styles.check}
-          />
-        </TouchableOpacity>
 
         <TextInput
           style={styles.input}
@@ -100,6 +159,46 @@ export default function SignUpTrainer() {
           <Text style={styles.error}>{formik.errors.email}</Text>
         ) : null}
 
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.inputPassword}
+            placeholder="Enter Your Password"
+            onChangeText={formik.handleChange('password')}
+            onBlur={formik.handleBlur('password')}
+            value={formik.values.password}
+            secureTextEntry={!visiblePassword}
+          />
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={togglePasswordVisibility}
+          >
+            <Image
+              source={{ uri: visiblePassword ? 'https://icon2.cleanpng.com/20180424/pxq/kisspng-computer-icons-cross-eye-5adf65ca6e96c2.927735901524590026453.jpg' : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KjU4cWc-z6DWOwvoC06bAS_wA4MzgIQJiw&s' }}
+              style={styles.check}
+            />
+          </TouchableOpacity>
+        </View>
+        {formik.touched.password && formik.errors.password ? (
+          <Text style={styles.error}>{formik.errors.password}</Text>
+        ) : null}
+
+        <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateInput}>
+          <Text style={styles.dateText}>
+            {formik.values.dob ? formik.values.dob : "Select Your Date of Birth"}
+          </Text>
+        </TouchableOpacity>
+        {formik.touched.dob && formik.errors.dob ? (
+          <Text style={styles.error}>{formik.errors.dob}</Text>
+        ) : null}
+        {showDatePicker && (
+          <DateTimePicker
+            value={formik.values.dob ? new Date(formik.values.dob) : new Date()}
+            mode="date"
+            display="default"
+            onChange={onDateChange}
+          />
+        )}
+
         <TextInput
           style={styles.input}
           placeholder="Enter Your Location"
@@ -109,6 +208,28 @@ export default function SignUpTrainer() {
         />
         {formik.touched.location && formik.errors.location ? (
           <Text style={styles.error}>{formik.errors.location}</Text>
+        ) : null}
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Your Image URL"
+          onChangeText={formik.handleChange('image')}
+          onBlur={formik.handleBlur('image')}
+          value={formik.values.image}
+        />
+        {formik.touched.image && formik.errors.image ? (
+          <Text style={styles.error}>{formik.errors.image}</Text>
+        ) : null}
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Your Phone Number"
+          onChangeText={formik.handleChange('phone')}
+          onBlur={formik.handleBlur('phone')}
+          value={formik.values.phone}
+        />
+        {formik.touched.phone && formik.errors.phone ? (
+          <Text style={styles.error}>{formik.errors.phone}</Text>
         ) : null}
 
         <Dropdown
@@ -124,11 +245,11 @@ export default function SignUpTrainer() {
           valueField="value"
           placeholder={!isFocus ? 'Experience' : '...'}
           searchPlaceholder="Search..."
-          value={formik.values.experiance}
+          value={formik.values.experience}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={item => {
-            formik.setFieldValue('experiance', item.value);
+            formik.setFieldValue('experience', item.value);
             setIsFocus(false);
           }}
           renderLeftIcon={() => (
@@ -140,12 +261,12 @@ export default function SignUpTrainer() {
             />
           )}
         />
-        {formik.touched.experiance && formik.errors.experiance ? (
-          <Text style={styles.error}>{formik.errors.experiance}</Text>
+        {formik.touched.experience && formik.errors.experience ? (
+          <Text style={styles.error}>{formik.errors.experience}</Text>
         ) : null}
 
         <View style={styles.buttonNext}>
-          <TouchableOpacity onPress={() => formik.handleSubmit} style={styles.link}>
+          <TouchableOpacity onPress={() => formik.handleSubmit()} style={styles.link}>
             <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -155,24 +276,29 @@ export default function SignUpTrainer() {
           <View style={styles.dot3}></View>
           <View style={styles.dot4}></View>
         </View>
-      </SafeAreaView>
-    </>
-  )
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
   mainImage: {
     height: 200,
     width: 300,
     borderRadius: 20,
-    margin: 'auto',
     marginTop: 50
   },
   form: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    margin: 'auto'
   },
   input: {
     height: 40,
@@ -181,9 +307,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginTop: 10,
     width: 300,
-    margin: 'auto',
     borderRadius: 15,
     marginBottom: 5
+  },
+  dateInput: {
+    height: 40,
+    borderColor: 'rgba(255,159,71,0.8)',
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    marginTop: 10,
+    width: 300,
+    borderRadius: 15,
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dateText: {
+    color: '#000',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'rgba(255,159,71,0.8)',
+    borderWidth: 1,
+    borderRadius: 15,
+    width: 300,
+    marginTop: 10,
+    paddingHorizontal: 8,
+  },
+  inputPassword: {
+    flex: 1,
+    height: 40,
   },
   toggleButton: {
     marginLeft: 10
@@ -194,7 +348,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     fontSize: 18,
-    margin: 'auto'
   },
   error: {
     color: 'red',
@@ -205,7 +358,6 @@ const styles = StyleSheet.create({
   check: {
     width: 20,
     height: 20,
-    marginTop: 15,
   },
   dropdown: {
     height: 40,
@@ -214,7 +366,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 8,
     width: 300,
-    margin: 'auto',
     marginTop: 30
   },
   icon: {
@@ -268,57 +419,24 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   dotcontainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 50,
     width: 150,
-    margin: 'auto'
   },
   buttonNext: {
     backgroundColor: 'rgba(255,159,71,0.4)',
     width: '40%',
     height: 50,
-    margin: 'auto',
     borderRadius: 15,
-    marginTop: 30
+    marginTop: 30,
   },
   TextButton: {
     fontSize: 25,
     textAlign: 'center',
-    margin: 'auto',
+    marginTop: 10,
   },
   link: {
     height: 50
   },
-})
-
-
- // לעבוד עם ה useFormik
-
-  // <Formik
-  //   initialValues={{
-  //     name: '',
-  //     email: '',
-  //     location: '',
-  //     experiance: '',
-  //     password: ''
-  //   }}
-  //   validate={(values) => {
-  //     const errors: any = {};
-  //     if (!values.name) errors.name = 'Required';
-  //     if (!values.email) errors.email = 'Required';
-  //     if (!values.location) errors.location = 'Required';
-  //     if (!values.experiance) errors.experiance = 'Required';
-  //     if (!values.password) errors.password = 'Required';
-  //     return errors;
-  //   }}
-  //   onSubmit={(values, { resetForm }) => {
-  //     const success = AddTrainer(values as TrainerType);
-  //     if (success) {
-  //       resetForm();
-  //       navigation.navigate('Payment');
-  //     }
-  //   }}
-  // >
-  // {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => ()}
+});
