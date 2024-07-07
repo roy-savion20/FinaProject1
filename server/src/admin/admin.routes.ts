@@ -1,5 +1,5 @@
 import { Router } from "express";  
-import { getAll, getUserById } from "../Trainer/trainer.controller";
+import { getAll, getUserById, logicDeleteUser, update } from "../Trainer/trainer.controller";
 import { GetAllCostumrs, getCostumerById } from "../Costumer/Costumer.controler";
 import { RegisterCostumer, LoginCostumer } from "./admin.controller";
 
@@ -12,7 +12,7 @@ AdminRouter
     .get('/allcostumers/:id', getCostumerById)
     .post('/login', LoginCostumer)
     .post('/register', RegisterCostumer)
-    .put('/update/:id', )
-    .delete('/physic/delete/:id', )
+    .put('/update/:id', update)
+    .delete('/logic/delete/:id', logicDeleteUser)
 
 export default AdminRouter;
