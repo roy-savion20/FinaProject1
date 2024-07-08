@@ -6,7 +6,7 @@ export type TrainerType = {
     dob: Date,
     location: string,
     experiance: string,
-    image: string,
+    image?: string,
     phone: string,
     payment: {
         card: string,
