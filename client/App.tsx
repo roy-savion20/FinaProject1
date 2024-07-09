@@ -15,6 +15,8 @@ import Profile from './screens/Profile';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Chat from './components/Chat';
 import Settings from './screens/Settings';
+import allCostumers from './screens/allCostumers';
+import LogIn from './screens/LogIn';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -50,6 +52,8 @@ function StackNav() {
       <Stack.Screen name="SignUpCostumer" component={SignUpCostumer} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpTrainer" component={SignUpTrainer} options={{ headerShown: false }} />
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
+      <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: false }} />
+      <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: false }} />
       <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false }} />
     </Stack.Navigator>
   );

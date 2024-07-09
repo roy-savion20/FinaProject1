@@ -26,11 +26,18 @@ export default function Bording1() {
             <Text style={styles.or}>OR</Text>
             <Text style={styles.DogDesc}>Get Your Dog Trainer</Text>
         </View>
-        <View style={styles.buttonNext}>
-            <TouchableOpacity onPress={() => navigation.navigate('Bording2')} style={styles.link}>
-                <Text style={styles.TextButton}>Next</Text>
-            </TouchableOpacity>
-      </View>
+        <View style={styles.buttonContainer}>
+            <View style={styles.buttonNext}>
+                <TouchableOpacity onPress={() => navigation.navigate('Bording2')} style={styles.link}>
+                    <Text style={styles.TextButton}>Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.buttonNext}>
+                <TouchableOpacity onPress={() => navigation.navigate('LogIn')} style={styles.link}>
+                    <Text style={styles.TextButton}>Log In</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
       <View style={styles.dotcontainer}>
         <View style={styles.dot1}></View>
         <View style={styles.dot2}></View>
@@ -124,6 +131,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize:32,
         fontWeight: 'bold',
+    },
+    buttonContainer:{
+        flexDirection: "row"
     }
   });
 

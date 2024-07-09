@@ -4,8 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Trainers from '../data/Trainers.json'
 import BarChart from 'react-native-chart-kit/dist/BarChart';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 export default function Profile() {
-
+  const navigation = useNavigation();
   const screenWidth = Dimensions.get('window').width;
 
 const data = {
@@ -47,7 +48,7 @@ const chartConfig = {
             <Text style={styles.TextContainer}>Stats</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('allCostumers')}>
         <View style={styles.StatesContainer}>
             <Text style={styles.TextContainer}>costumers</Text>
           </View>
