@@ -66,11 +66,11 @@ const chartConfig = {
         </TouchableOpacity>
       </View>
       <View style={styles.moneyContainer}>
-        <View style={styles.testdiv}>
+        <View>
           <Text style={styles.textMoney}>Income</Text>
         </View>
         <View style={styles.Line}></View>
-        <View style={styles.testdiv}>
+        <View>
           <Text style={styles.textMoney}>Outcome</Text>
         </View>
       </View>

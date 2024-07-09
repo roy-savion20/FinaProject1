@@ -23,15 +23,19 @@ const Stack = createStackNavigator();
   return (
     <Tab.Navigator>
       <Tab.Screen name="HomePage" component={HomePage} options={{tabBarLabel: 'Home',
+            headerShown: false,
             tabBarIcon: () => <MaterialCommunityIcons name='home' size={35} color='rgba(255,159,71,1)'/>
         }} />
       <Tab.Screen name="Profile" component={Profile}  options={{tabBarLabel: 'Profile',
+            headerShown: false,
             tabBarIcon: () => <MaterialCommunityIcons name='account' size={35} color='rgba(255,159,71,1)'/>
         }} />
         <Tab.Screen name="Chat" component={Chat}  options={{tabBarLabel: 'Chat',
+            headerShown: false,
             tabBarIcon: () => <MaterialCommunityIcons name='wechat' size={35} color='rgba(255,159,71,1)'/>
         }} />
           <Tab.Screen name="Settings" component={Settings}  options={{tabBarLabel: 'Settings',
+            headerShown: false,
             tabBarIcon: () => <Feather name="settings" size={24} color="rgba(255,159,71,1)" />
         }} />
     </Tab.Navigator>

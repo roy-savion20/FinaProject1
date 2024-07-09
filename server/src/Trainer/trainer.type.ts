@@ -11,5 +11,10 @@ export type User = {
         card: string,
         date: string,
         ccv: string
+    },
+    Chat?:{
+        title: string,
+        description: string
+        date: Date
     }
 } 
