@@ -55,7 +55,7 @@ const chartConfig = {
         </TouchableOpacity>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Calander')}>
           <View style={styles.StatesContainer}>
             <Text style={styles.TextContainer}>Scheduals</Text>
           </View>

@@ -17,6 +17,7 @@ import Chat from './components/Chat';
 import Settings from './screens/Settings';
 import allCostumers from './screens/allCostumers';
 import LogIn from './screens/LogIn';
+import Calander from './screens/Calander';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -53,7 +54,8 @@ function StackNav() {
       <Stack.Screen name="SignUpTrainer" component={SignUpTrainer} options={{ headerShown: false }} />
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
       <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: false }} />
-      <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: false }} />
+      <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: true }} />
+      <Stack.Screen name="Calander" component={Calander} options={{ headerShown: false }} />
       <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
