@@ -92,7 +92,7 @@ const GeminiChat = () => {
       />
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="Type a message"
+          placeholder="Type a message..."
           onChangeText={setUserInput}
           value={userInput}
           onSubmitEditing={sendMessage}
@@ -111,17 +111,25 @@ const GeminiChat = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "rgba(255,159,71,0.2)",height: 'auto' },
+  container: { 
+    backgroundColor: "rgba(255,159,71,0.4)",
+    height: 750
+   },
   messageContainer: { padding: 10, marginVertical: 5 },
   messageText: { fontSize: 16,color: 'white' },
-  inputContainer: { flexDirection: "row", alignItems: "center", padding: 10 },
-  input: {
-    flex: 1,
+  inputContainer: { 
+    flexDirection: "row",
+    alignItems: "center", 
     padding: 10,
-    backgroundColor: "rgba(255,159,71,1)",
+  },
+  input: {
+    padding: 10,
+    backgroundColor: "rgba(255,159,10,1)",
     borderRadius: 10,
     height: 50,
     color: "white",
+    width: '90%',
+    margin: 'auto'
   },
   micIcon: {
     padding: 10,
@@ -144,12 +152,14 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   userMessage:{
-    color: '#A5A5A5'
+    color: '#ffff'
   },
   scroll:{
-    backgroundColor:'rgba(255,159,71,0.2)',
+    backgroundColor:'rgba(255,159,71,1)',
     height: '100%'
   }
 });
 
 export default GeminiChat;
+
+
