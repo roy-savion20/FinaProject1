@@ -80,7 +80,7 @@ export default function Payment(TrainerInfo: any) {
       console.log('Payment info:', payment);
       resetForm();
       if (payment.card) {
-        navigation.navigate('TabNav');
+        navigation.navigate('Back');
       }
     }
   });

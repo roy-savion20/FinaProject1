@@ -60,7 +60,7 @@ const chartConfig = {
             <Text style={styles.TextContainer}>Scheduals</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Posts')}>
         <View style={styles.StatesContainer}>
             <Text style={styles.TextContainer}>Posts</Text>
           </View>

@@ -17,12 +17,13 @@ import Chat from './components/Chat';
 import Settings from './screens/Settings';
 import allCostumers from './screens/allCostumers';
 import LogIn from './screens/LogIn';
-import Calander from './screens/Calander';
+import Calanders from './screens/Calanders';
+import Posts from './screens/Posts';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
- function TabNav() {
+ function Back() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="HomePage" component={HomePage} options={{tabBarLabel: 'Home',
@@ -30,7 +31,7 @@ const Stack = createStackNavigator();
             tabBarIcon: () => <MaterialCommunityIcons name='home' size={35} color='rgba(255,159,71,1)'/>
         }} />
       <Tab.Screen name="Profile" component={Profile}  options={{tabBarLabel: 'Profile',
-            headerShown: false,
+            headerShown: true,
             tabBarIcon: () => <MaterialCommunityIcons name='account' size={35} color='rgba(255,159,71,1)'/>
         }} />
         <Tab.Screen name="Chat" component={Chat}  options={{tabBarLabel: 'Chat',
@@ -55,8 +56,9 @@ function StackNav() {
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
       <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: false }} />
       <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: true }} />
-      <Stack.Screen name="Calander" component={Calander} options={{ headerShown: false }} />
-      <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false }} />
+      <Stack.Screen name="Calander" component={Calanders} options={{ headerShown: true }} />
+      <Stack.Screen name="Posts" component={Posts} options={{ headerShown: true }} />
+      <Stack.Screen name="Back" component={Back} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
