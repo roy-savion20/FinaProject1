@@ -69,10 +69,19 @@ export default function Posts() {
               value={input2}
               onChangeText={setInput2}
             />
-            <Button title="Pick an image" onPress={pickImage} />
+            <View style={styles.buttondiv}>
+              <Button title="Pick an image" onPress={pickImage}/>
+            </View>
             {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-            <Button title="Submit" onPress={handleSubmit} />
-            <Button title="Close" onPress={toggleModal} />
+            <View style={styles.buttondiv}>
+              <Button title="Submit" 
+              onPress={handleSubmit}  
+              />
+            </View>
+            <View
+            style={styles.buttondiv}>
+              <Button title="Close" onPress={toggleModal}/>
+            </View>
           </View>
         </View>
       </Modal>
@@ -134,5 +143,11 @@ const styles = StyleSheet.create({
   textadd:{
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  btn:{
+    marginTop: 30
+  },
+  buttondiv:{
+    marginTop: 15
   }
 });
