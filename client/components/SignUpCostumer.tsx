@@ -6,6 +6,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useFormik } from 'formik';
+import { CoustumerType } from '../types/coustumer_type';
 
 export default function SignUpCustomer() {
   const navigation = useNavigation();
@@ -26,10 +27,11 @@ export default function SignUpCustomer() {
       password: '',
       dob: '',
       location: '',
-      experience: '',
       image: '',
       phone: '',
-      update_details: ''
+      update_details: '',
+      clientType:'2'
+
     },
     validate: (values) => {
       const errors: any = {};
@@ -78,12 +80,6 @@ export default function SignUpCustomer() {
         errors.location = 'Location must be at least 2 characters';
       }
 
-      if (!values.experience) {
-        errors.experience = 'Required';
-      } else if (isNaN(Number(values.experience))) {
-        errors.experience = 'Experience must be a number';
-      }
-
       if (!values.image) {
         errors.image = 'Required';
       }
@@ -101,11 +97,11 @@ export default function SignUpCustomer() {
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      const CustomerInfo: any = values;
+      const NewUser: Partial<CoustumerType> = values;
       console.log(values);
       resetForm();
-      if (CustomerInfo.email !== '') {
-        navigation.navigate("Payment", { CustomerInfo });
+      if (NewUser.email !== '') {
+        NewUser.navigate("Payment", { NewUser });
       }
     }
   });
@@ -233,39 +229,6 @@ export default function SignUpCustomer() {
         />
         {formik.touched.phone && formik.errors.phone ? (
           <Text style={styles.error}>{formik.errors.phone}</Text>
-        ) : null}
-
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={data}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Experience' : '...'}
-          searchPlaceholder="Search..."
-          value={formik.values.experience}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            formik.setFieldValue('experience', item.value);
-            setIsFocus(false);
-          }}
-          renderLeftIcon={() => (
-            <AntDesign
-              style={styles.icon}
-              color={isFocus ? 'blue' : 'black'}
-              name="Safety"
-              size={20}
-            />
-          )}
-        />
-        {formik.touched.experience && formik.errors.experience ? (
-          <Text style={styles.error}>{formik.errors.experience}</Text>
         ) : null}
 
         <TextInput

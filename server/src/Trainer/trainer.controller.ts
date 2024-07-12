@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser } from "./trainer.model";
-import { User } from "./trainer.type";
+import { TrainerUser } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
 
 export async function getAll(req: Request, res: Response) {
@@ -44,21 +44,21 @@ export async function login(req: Request, res: Response) {
             res.status(200).json({ user });
         else
             res.status(400).json({ message: 'invalid email or password' });
-        
+
     } catch (error) {
         res.status(500).json({ error });
     }
 }
 
 export async function register(req: Request, res: Response) {
-    let { name,email,location,password,experiance,payment } = req.body;
-    if (!email || !password || !name || !location || !experiance || !payment)
+    let { first_name, last_name, email, password, dob, location, experience, image, phone, clientType, payment } = req.body;
+    if (!first_name || !last_name || !email || !password || !dob || !location || !experience || !image || !phone || !clientType || !payment)
         return res.status(400).json({ message: 'missing info' });
 
     try {
         //הפעלת הפונקציה להצפנת הסיסמה
         password = encryptPassword(password);
-        let user: User = { name,email,location,password,experiance,payment }
+        let user: TrainerUser = { first_name, last_name, email, password, dob, location, experience, image, phone, clientType, payment }
         let result = await registerUser(user);
         if (!result.insertedId)
             res.status(400).json({ message: 'registration failed' });

@@ -1,20 +1,45 @@
-import { StyleSheet, Text, View,Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useFormik } from 'formik';
 
 export default function LogIn() {
-
   const [visiblePassword, setVisiblePassword] = useState(false);
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validate: (values) => {
+      const errors: any = {};
+      if (!values.email) {
+        errors.email = 'Required';
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+      }
 
-  
+      if (!values.password) {
+        errors.password = 'Required';
+      } else if (values.password.length < 6) {
+        errors.password = 'Password must be at least 6 characters';
+      }
+      return errors;
+    },
+
+    onSubmit: (values, { resetForm }) => {
+      console.log(values);
+      console.log(formik.errors)
+    },
+  });
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-      <View>
+        <View>
           <Image
             source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s' }}
             style={styles.mainImage}
@@ -27,7 +52,11 @@ export default function LogIn() {
           onBlur={formik.handleBlur('email')}
           value={formik.values.email}
         />
-                <View style={styles.passwordContainer}>
+        {formik.touched.email && formik.errors.email ?
+          <Text style={styles.error}>{formik.errors.email}</Text>
+          : null}
+
+        <View style={styles.passwordContainer}>
           <TextInput
             style={styles.inputPassword}
             placeholder="Enter Your Password"
@@ -44,6 +73,14 @@ export default function LogIn() {
               source={{ uri: visiblePassword ? 'https://icon2.cleanpng.com/20180424/pxq/kisspng-computer-icons-cross-eye-5adf65ca6e96c2.927735901524590026453.jpg' : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_KjU4cWc-z6DWOwvoC06bAS_wA4MzgIQJiw&s' }}
               style={styles.check}
             />
+          </TouchableOpacity>
+        </View>
+        {formik.touched.password && formik.errors.password ? (
+          <Text style={styles.error}>{formik.errors.password}</Text>
+        ) : null}
+        <View style={styles.buttonNext}>
+          <TouchableOpacity onPress={() => formik.handleSubmit()} style={styles.link}>
+            <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -110,7 +147,8 @@ const styles = StyleSheet.create({
     height: 40,
   },
   toggleButton: {
-    marginLeft: 10
+    marginLeft: 10,
+
   },
   toggleButtonText: {
     width: 170,

@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { User } from "./trainer.type";
+import { TrainerUser } from "./trainer.type";
 
 const DB_INFO = {
     connection: process.env.CONNECTION_STRING as string,
@@ -45,7 +45,7 @@ export async function checkIfDocumentExists(query = {}) {
     }
 }
 
-export async function insertUser(user: User) {
+export async function insertUser(user: TrainerUser) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         //התחברות למסד הנתונים
@@ -61,7 +61,7 @@ export async function insertUser(user: User) {
     }
 }
 
-export async function updateDoc(user: User) {
+export async function updateDoc(user: TrainerUser) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         //התחברות למסד הנתונים

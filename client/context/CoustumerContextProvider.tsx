@@ -1,20 +1,18 @@
 import React, { createContext, useState } from "react";
-import { Alert } from "react-native";
 import { CoustumerType } from "../types/coustumer_type";
 
-export const TrainerContext = createContext<any>({});
+export const CoustumerContext = createContext<any>({});
 
 
 
 export default function CoustumerContextProvider({ children }: any) {
 
-    const [allCoustumer, setAllCoustumer] = useState<CoustumerType[]>([]);
+    const [allCoustumers, setAllCoustumer] = useState<CoustumerType[]>([]);
     const [currentCoustumer, setCurrentCoustumer] = useState<CoustumerType>();
-    const [coustumerInfo, setCoustumerInfo] = useState<Partial<CoustumerType> | undefined>();
 
-    const addCostumerInfo = (costumerInfo: Partial<CoustumerType>) => {
+    const AddNewCoustumer = (costumerInfo: CoustumerType) => {
         try{
-            setCoustumerInfo(costumerInfo);
+            setAllCoustumer([...allCoustumers, costumerInfo]);
             return true;
         }catch(error)
         {
@@ -22,20 +20,16 @@ export default function CoustumerContextProvider({ children }: any) {
             return false;
         }
     }
-    const addCostumer = (costumerVisaInfo: Partial<CoustumerType>) => {
-        try {
-            const newCostumer: CoustumerType = {
-                ...coustumerInfo,
-                payment: costumerVisaInfo
-            } as CoustumerType;
-            setAllCoustumer([...allCoustumer, newCostumer]);
-            console.log()
-            return true;
-        } catch (error) {
-            console.log(error);
-            return false;
-        }
 
-    }
+    return (
+        <CoustumerContext.Provider
+            value={{
+                allCoustumers,
+                currentCoustumer,
+                AddNewCoustumer
+            }}>
+            {children}
+        </CoustumerContext.Provider>
+    );
 
 }

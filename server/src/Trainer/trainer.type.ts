@@ -1,12 +1,17 @@
 import { ObjectId } from "mongodb"
 
-export type User = {
+export type TrainerUser = {
     _id?: ObjectId,
-    name?: string,
+    first_name: string,
+    last_name: string,
     email: string,
-    location: string,
     password: string,
-    experiance?: string,
+    location: string,
+    dob: string,
+    experience?: string,
+    image: string,
+    phone: string,
+    clientType:string, // 1 for trainer 2 for costumer
     payment?: {
         card: string,
         date: string,

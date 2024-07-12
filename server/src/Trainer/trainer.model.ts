@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { checkIfDocumentExists, findUsers, insertUser, updateDoc, deleteUser, decativateUser } from "./trainer.db";
-import { User } from "./trainer.type";
+import { TrainerUser } from "./trainer.type";
 
 export async function getAllUsers() {
     let query = {
@@ -33,7 +33,7 @@ export async function loginUser(email: string) {
     }
 }
 
-export async function registerUser(user: User) {
+export async function registerUser(user: TrainerUser) {
     try {
         //האם המייל קיים כבר במאגר
         let query = { email: user.email }
@@ -54,7 +54,7 @@ export async function registerUser(user: User) {
 
 export async function updateUser(id: string, email: string, password: string, location: any) {
     try {
-        let user: User = { email, password, _id : new ObjectId(id),location }
+        let user: TrainerUser = { email, password, _id : new ObjectId(id),location }
         console.log(user)
         return await updateDoc(user);
     } catch (error) {

@@ -6,9 +6,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import { TrainerContext } from '../context/TrainerContextProvider';
+import { TrainerType } from '../types/trainer_type';
+import { CoustumerType } from '../types/coustumer_type';
 
-export default function Payment(TrainerInfo: any) {
-  const { AddPaymentInfoTrainer, addTrainer } = useContext(TrainerContext);
+
+
+// # Connection for yuval - eMcWHJbuAdzLwDEf
+export default function Payment(NewUser: any) {
+  const { AddTrainer } = useContext(TrainerContext);
+  const { AddCoustumer } = useContext(TrainerContext);
   const navigation = useNavigation();
   const route = useRoute();
   const [isFocus, setIsFocus] = useState(false);
@@ -76,8 +82,43 @@ export default function Payment(TrainerInfo: any) {
         date: values.year + '-' + values.month,
         cvv: values.cvv
       }
-      console.log('TrainerInfo:', JSON.stringify(TrainerInfo, null, 2)); // Updated to display values
-      console.log('Payment info:', payment);
+      // console.log('TrainerInfo:', JSON.stringify(TrainerInfo, null, 2)); // Updated to display values
+      if (NewUser.clientType == '1') {
+        console.log('TrainerInfo:', JSON.stringify(NewUser, null, 2)); // Updated to display values
+        const NewTrainer: TrainerType = {
+          first_name: NewUser.first_name,
+          last_name: NewUser.last_name,
+          email: NewUser.email,
+          password: NewUser.password,
+          dob: NewUser.dob,
+          location: NewUser.location,
+          experience: NewUser.experience,
+          image: NewUser.image,
+          phone: NewUser.phone,
+          clientType: NewUser.clientType,
+          payment: payment
+        }
+        AddTrainer(NewTrainer);
+        console.log('New Trainer: ' + NewTrainer);
+      }
+      else if (NewUser.clientType == '2') {
+        console.log('CustomerInfo:', JSON.stringify(NewUser, null, 2)); // Updated to display values
+        const NewCustomer: CoustumerType = {
+          first_name: NewUser.first_name,
+          last_name: NewUser.last_name,
+          email: NewUser.email,
+          password: NewUser.password,
+          dob: NewUser.dob,
+          location: NewUser.location,
+          image: NewUser.image,
+          phone: NewUser.phone,
+          clientType: NewUser.clientType,
+          update_details:NewUser.update_details,
+          payment: payment
+        }
+        AddCoustumer(NewCustomer);
+        console.log('New Customer: ' + NewCustomer);
+      }
       resetForm();
       if (payment.card) {
         navigation.navigate('Back');
@@ -269,7 +310,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 30,
-    
+
   },
   cvv: {
     marginTop: 10,

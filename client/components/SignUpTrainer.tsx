@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TrainerContext } from '../context/TrainerContextProvider';
 import { useFormik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { TrainerType } from '../types/trainer_type';
 
 export default function SignUpTrainer() {
   const navigation = useNavigation();
@@ -30,7 +31,8 @@ export default function SignUpTrainer() {
       location: '',
       experience: '',
       image: '',
-      phone: ''
+      phone: '',
+      clientType:'1'
     },
     validate: (values) => {
       const errors: any = {};
@@ -98,11 +100,11 @@ export default function SignUpTrainer() {
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      const TrainerInfo: any = values;
+      const NewUser: Partial<TrainerType> = values;
       console.log(values);
       resetForm();
-      if (TrainerInfo.email !== '') {
-        navigation.navigate("Payment", { TrainerInfo});
+      if (NewUser.email !== '') {
+        navigation.navigate("Payment", { NewUser });
       }
     }
   });
