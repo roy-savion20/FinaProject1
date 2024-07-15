@@ -123,7 +123,7 @@ export default function SignUpTrainer() {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View>
           <Image
-            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s' }}
+            source={(require('../assets/2.png'))}
             style={styles.mainImage}
           />
         </View>
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   mainImage: {
-    height: 200,
+    height: 220,
     width: 300,
     borderRadius: 20,
     marginTop: 50
@@ -304,20 +304,20 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'rgba(255,159,71,0.8)',
+    borderColor: 'rgba(2,71,56,0.8)',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginTop: 10,
+    marginTop: 15,
     width: 300,
     borderRadius: 15,
     marginBottom: 5
   },
   dateInput: {
     height: 40,
-    borderColor: 'rgba(255,159,71,0.8)',
+    borderColor: 'rgba(2,71,56,0.8)',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginTop: 10,
+    marginTop: 15,
     width: 300,
     borderRadius: 15,
     marginBottom: 5,
@@ -330,11 +330,11 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: 'rgba(255,159,71,0.8)',
+    borderColor: 'rgba(2,71,56,0.8)',
     borderWidth: 1,
     borderRadius: 15,
     width: 300,
-    marginTop: 10,
+    marginTop: 15,
     paddingHorizontal: 8,
   },
   inputPassword: {
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 40,
-    borderColor: 'rgba(255,159,71,0.8)',
+    borderColor: 'rgba(2,71,56,0.8)',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
@@ -396,30 +396,30 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  dot1: {
-    width: 25,
-    height: 25,
-    backgroundColor: 'rgba(255,159,71,0.4)',
+  dot1:{
+    width:25,
+    height:25,
+    backgroundColor:'#63E381',
     borderRadius: 100,
-  },
-  dot2: {
-    width: 25,
-    height: 25,
-    backgroundColor: 'rgba(255,159,71,0.4)',
+},
+dot2:{
+    width:25,
+    height:25,
+    backgroundColor:'#63E381',
     borderRadius: 100,
-  },
-  dot3: {
-    width: 25,
-    height: 25,
-    backgroundColor: 'rgba(255,159,71,1)',
+},
+dot3:{
+    width:25,
+    height:25,
+    backgroundColor:'#024738',
     borderRadius: 100,
-  },
-  dot4: {
-    width: 25,
-    height: 25,
-    backgroundColor: 'rgba(255,159,71,0.4)',
+},
+dot4:{
+    width:25,
+    height:25,
+    backgroundColor:'#63E381',
     borderRadius: 100,
-  },
+},
   dotcontainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
   buttonNext: {
-    backgroundColor: 'rgba(255,159,71,0.4)',
+    backgroundColor: 'rgba(7,140,101,0.6)',
     width: '40%',
     height: 50,
     borderRadius: 15,

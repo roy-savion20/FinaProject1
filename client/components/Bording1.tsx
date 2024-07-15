@@ -1,12 +1,11 @@
 import { View, Text,StyleSheet,Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 
 
 
-export default function Bording1() {
+export default function back() {
     const navigation = useNavigation()
    
 
@@ -14,7 +13,7 @@ export default function Bording1() {
     <SafeAreaView style={styles.safeArea}>
         <View>
             <Image
-            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s'}}
+            source={(require('../assets/2.png'))}
             style={styles.mainImage}
             />
         </View>
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     buttonNext:{
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'rgba(29,189,123,0.7)',
         width: '40%',
         height: 50,
         margin:'auto',
@@ -96,25 +95,25 @@ const styles = StyleSheet.create({
     dot1:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,1)',
+        backgroundColor:'#024738',
         borderRadius: 100,
     },
     dot2:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     dot3:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     dot4:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     link:{

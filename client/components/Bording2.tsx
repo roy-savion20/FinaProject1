@@ -9,7 +9,7 @@ export default function Bording2() {
     <SafeAreaView>
         <View>
             <Image
-            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s'}}
+            source={(require('../assets/2.png'))}
             style={styles.mainImage}
             />
         </View>
@@ -19,11 +19,11 @@ export default function Bording2() {
                     <Text style={styles.textdot}>Trainer</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.dogdiv}>
-                <TouchableOpacity onPress={() => navigation.navigate('SignUpCostumer')} style={styles.link}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUpCostumer')} style={styles.link}>
+                <View style={styles.dogdiv}>
                     <Text style={styles.textdot}>Dog Owner</Text>
-                </TouchableOpacity>
-            </View>
+                </View>
+            </TouchableOpacity>
         </View>
         <View style={styles.dotcontainer}>
             <View style={styles.dot1}></View>
@@ -39,25 +39,25 @@ const styles = StyleSheet.create({
     dot1:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     dot2:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,1)',
+        backgroundColor:'#024738',
         borderRadius: 100,
     },
     dot3:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     dot4:{
         width:25,
         height:25,
-        backgroundColor:'rgba(255,159,71,0.4)',
+        backgroundColor:'#63E381',
         borderRadius: 100,
     },
     dotcontainer:{
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     dogdiv:{
         height: 150,
         width: 150,
-        backgroundColor:'rgba(255,159,71,0.8)',
+        backgroundColor:'rgba(7,140,101,0.6)',
         borderRadius: 100
     },
     circlecontainer:{
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 40,
+        marginLeft: 40
     },
     textdot:{
         textAlign: 'center',
@@ -93,6 +94,6 @@ const styles = StyleSheet.create({
         margin: 'auto'
     },
     link:{
-        margin: 'auto'
+        margin: 'auto',
     }
 })

@@ -15,12 +15,12 @@ const data = {
     {
       label: 'Incomes',
       data: [2200, 2500, 2700, 3000, 2900, 3200],
-      color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`, // green
+      color: (opacity = 1) => `rgba(29,189,123, ${opacity})`, // green
     },
     {
       label: 'Outcomes',
       data: [2000, 2100, 2200, 2800, 2600, 3000],
-      color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // red
+      color: (opacity = 1) => `rgba(29,189,123, ${opacity})`, // red
     },
   ],
 };
@@ -28,7 +28,7 @@ const data = {
 const chartConfig = {
   backgroundGradientFrom: '#fff',
   backgroundGradientTo: '#fff',
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  color: (opacity = 1) => `rgba(2,71,56, ${opacity})`,
   barPercentage: 0.5,
 };
 
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 70
   },
   StatesContainer:{
-    backgroundColor: "rgba(255,159,71,0.4)",
+    backgroundColor: "rgba(29,189,123,0.6)",
     height: 130,
     width: 130,
     borderRadius: 20
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   moneyContainer:{
-    backgroundColor: "rgba(255,159,71,0.4)",
+    backgroundColor: "rgba(29,189,123,0.6)",
     flexDirection: "row",
     justifyContent: "space-around",
     height :70,

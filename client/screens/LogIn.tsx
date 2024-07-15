@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   input: {
     height: 40,
     borderColor: 'rgba(255,159,71,0.8)',
     borderWidth: 1,
     paddingHorizontal: 8,
-    marginTop: 10,
+    marginTop: 35,
     width: 300,
     borderRadius: 15,
     marginBottom: 5

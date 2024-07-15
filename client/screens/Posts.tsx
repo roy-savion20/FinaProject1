@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: 'tomato',
+    backgroundColor: 'rgba(7,140,101,0.6)',
     borderRadius: 30,
     width: 60,
     height: 60,

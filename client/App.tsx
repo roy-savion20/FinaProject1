@@ -19,6 +19,7 @@ import allCostumers from './screens/allCostumers';
 import LogIn from './screens/LogIn';
 import Calanders from './screens/Calanders';
 import Posts from './screens/Posts';
+import back from './components/Bording1';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,19 +29,19 @@ const Stack = createStackNavigator();
     <Tab.Navigator>
       <Tab.Screen name="HomePage" component={HomePage} options={{tabBarLabel: 'Home',
             headerShown: false,
-            tabBarIcon: () => <MaterialCommunityIcons name='home' size={35} color='rgba(255,159,71,1)'/>
+            tabBarIcon: () => <MaterialCommunityIcons name='home' size={35} color='#1DBD7B'/>
         }} />
       <Tab.Screen name="Profile" component={Profile}  options={{tabBarLabel: 'Profile',
             headerShown: true,
-            tabBarIcon: () => <MaterialCommunityIcons name='account' size={35} color='rgba(255,159,71,1)'/>
+            tabBarIcon: () => <MaterialCommunityIcons name='account' size={35} color='#1DBD7B'/>
         }} />
         <Tab.Screen name="Chat" component={Chat}  options={{tabBarLabel: 'Chat',
             headerShown: false,
-            tabBarIcon: () => <MaterialCommunityIcons name='wechat' size={35} color='rgba(255,159,71,1)'/>
+            tabBarIcon: () => <MaterialCommunityIcons name='wechat' size={35} color='#1DBD7B'/>
         }} />
           <Tab.Screen name="Settings" component={Settings}  options={{tabBarLabel: 'Settings',
             headerShown: false,
-            tabBarIcon: () => <Feather name="settings" size={24} color="rgba(255,159,71,1)" />
+            tabBarIcon: () => <Feather name="settings" size={24} color="#1DBD7B" />
         }} />
     </Tab.Navigator>
   );
@@ -49,12 +50,12 @@ const Stack = createStackNavigator();
 function StackNav() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Bording1" component={Bording1} options={{ headerShown: false }} />
+      <Stack.Screen name="back" component={back} options={{ headerShown: false }} />
       <Stack.Screen name="Bording2" component={Bording2} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpCostumer" component={SignUpCostumer} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpTrainer" component={SignUpTrainer} options={{ headerShown: false }} />
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
-      <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: false }} />
+      <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: true }} />
       <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: true }} />
       <Stack.Screen name="Calander" component={Calanders} options={{ headerShown: true }} />
       <Stack.Screen name="Posts" component={Posts} options={{ headerShown: true }} />
