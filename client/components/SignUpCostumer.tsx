@@ -101,7 +101,7 @@ export default function SignUpCustomer() {
       console.log(values);
       resetForm();
       if (NewUser.email !== '') {
-        NewUser.navigate("Payment", { NewUser });
+        navigation.navigate("Payment", { NewUser });
       }
     }
   });
