@@ -32,7 +32,7 @@ export default function SignUpTrainer() {
       experience: '',
       image: '',
       phone: '',
-      clientType:'1'
+      clientType: '1'
     },
     validate: (values) => {
       const errors: any = {};
@@ -40,19 +40,27 @@ export default function SignUpTrainer() {
         errors.first_name = 'Required';
       } else if (values.first_name.length < 2) {
         errors.first_name = 'First name must be at least 2 characters';
+      } else if (values.first_name.length > 25) {
+        errors.first_name = 'First name must be less than 25 characters';
       }
 
       if (!values.last_name) {
         errors.last_name = 'Required';
       } else if (values.last_name.length < 2) {
         errors.last_name = 'Last name must be at least 2 characters';
+      } else if (values.last_name.length > 25) {
+        errors.last_name = 'Last name must be less than 25 characters';
       }
 
       if (!values.email) {
         errors.email = 'Required';
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email format';
+      } // בודק שהכתובת שהוזמנה נרשמה אך ורק באנגלית
+       else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Email must be in English';
       }
+
 
       if (!values.password) {
         errors.password = 'Required';
@@ -93,8 +101,8 @@ export default function SignUpTrainer() {
 
       if (!values.phone) {
         errors.phone = 'Required';
-      } else if (!/^\d{10}$/.test(values.phone)) {
-        errors.phone = 'Phone number must be 10 digits';
+      } else if (!/^05\d-\d{7}$/.test(values.phone)) {
+        errors.phone = 'Phone number must be in the format 05X-XXXXXXX';
       }
 
       return errors;
@@ -109,7 +117,7 @@ export default function SignUpTrainer() {
     }
   });
 
-  const onDateChange = (event : Event, selectedDate: Date) => {
+  const onDateChange = (event: Event, selectedDate: Date) => {
     if (event.type === "set") {
       const currentDate = selectedDate || new Date();
       const formattedDate = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
@@ -396,30 +404,30 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  dot1:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  dot1: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
-dot2:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  },
+  dot2: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
-dot3:{
-    width:25,
-    height:25,
-    backgroundColor:'#024738',
+  },
+  dot3: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#024738',
     borderRadius: 100,
-},
-dot4:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  },
+  dot4: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
+  },
   dotcontainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',

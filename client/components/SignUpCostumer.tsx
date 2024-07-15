@@ -8,6 +8,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useFormik } from 'formik';
 import { CoustumerType } from '../types/coustumer_type';
 
+import { launchImageLibrary } from 'react-native-image-picker';
+
 export default function SignUpCustomer() {
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
@@ -15,9 +17,27 @@ export default function SignUpCustomer() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
+  const [imagePath, setImagePath] = useState<string | null>(null);
+
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
+
+  // Updated function to handle image picking
+  const handleImageChange = () => {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.5 }, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorMessage) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const asset = response.assets[0];
+        setImagePath(asset.uri || '');
+        formik.setFieldValue('image', asset.uri); // Save the image path in formik state
+      }
+    });
+  };
+
 
   const formik = useFormik({
     initialValues: {
@@ -30,8 +50,7 @@ export default function SignUpCustomer() {
       image: '',
       phone: '',
       update_details: '',
-      clientType:'2'
-
+      clientType: '2'
     },
     validate: (values) => {
       const errors: any = {};
@@ -39,18 +58,24 @@ export default function SignUpCustomer() {
         errors.first_name = 'Required';
       } else if (values.first_name.length < 2) {
         errors.first_name = 'First name must be at least 2 characters';
+      } else if (values.first_name.length > 25) {
+        errors.first_name = 'First name must be less than 25 characters';
       }
 
       if (!values.last_name) {
         errors.last_name = 'Required';
       } else if (values.last_name.length < 2) {
         errors.last_name = 'Last name must be at least 2 characters';
+      } else if (values.last_name.length > 25) {
+        errors.last_name = 'Last name must be less than 25 characters';
       }
 
       if (!values.email) {
         errors.email = 'Required';
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email format';
+      } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Email must be in English';
       }
 
       if (!values.password) {
@@ -86,8 +111,8 @@ export default function SignUpCustomer() {
 
       if (!values.phone) {
         errors.phone = 'Required';
-      } else if (!/^\d{10}$/.test(values.phone)) {
-        errors.phone = 'Phone number must be 10 digits';
+      } else if (!/^05\d-\d{7}$/.test(values.phone)) {
+        errors.phone = 'Phone number must be in the format 05X-XXXXXXX';
       }
 
       if (!values.update_details) {
@@ -209,16 +234,23 @@ export default function SignUpCustomer() {
           <Text style={styles.error}>{formik.errors.location}</Text>
         ) : null}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Your Image URL"
-          onChangeText={formik.handleChange('image')}
-          onBlur={formik.handleBlur('image')}
-          value={formik.values.image}
-        />
+
+
+        {/* <View style={styles.buttonContainer}>
+          <View style={styles.buttonNext}>
+            <TouchableOpacity onPress={handleImageChange} style={styles.link}>
+              <Text style={styles.TextButton}>Pick Image</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.dateInput}>
+          <Text style={styles.dateText}>
+            {formik.values.image ? formik.values.image : "Select Your Image"}
+          </Text>
+        </View>
         {formik.touched.image && formik.errors.image ? (
           <Text style={styles.error}>{formik.errors.image}</Text>
-        ) : null}
+        ) : null} */}
 
         <TextInput
           style={styles.input}
@@ -259,9 +291,13 @@ export default function SignUpCustomer() {
 }
 
 
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row"
   },
   scrollViewContent: {
     alignItems: 'center',
@@ -372,30 +408,30 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  dot1:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  dot1: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
-dot2:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  },
+  dot2: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
-dot3:{
-    width:25,
-    height:25,
-    backgroundColor:'#024738',
+  },
+  dot3: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#024738',
     borderRadius: 100,
-},
-dot4:{
-    width:25,
-    height:25,
-    backgroundColor:'#63E381',
+  },
+  dot4: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
     borderRadius: 100,
-},
+  },
   dotcontainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
