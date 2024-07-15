@@ -8,9 +8,9 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import * as Speech from "expo-speech";
-import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { ScrollView } from "react-native-gesture-handler";
@@ -36,7 +36,6 @@ const GeminiChat = () => {
       const result = await model.generateContent(prompt);
       const response = result.response;
       const text = await response.text();
-      console.log(text);
       showMessage({
         message: 'Welcome to DogHouse AI',
         description: text,
@@ -66,28 +65,30 @@ const GeminiChat = () => {
     setUserInput('');
   };
 
-
-
   const clearMessages = () => {
     setMessages([]);
     setIsSpeaking(false);
   };
 
   const renderMessage = ({ item }: { item: Message }) => (
-    <View style={styles.messageContainer}>
-      <Text style={[styles.messageText, item.user && styles.userMessage]}>
+    <View style={item.user ? styles.userMessageContainer : styles.botMessageContainer}>
+      <Text style={styles.messageText}>
         {item.text}
       </Text>
     </View>
   );
 
   return (
-    <ScrollView style={styles.scroll}>
-          <View style={styles.container}>
+    <ScrollView style={styles.containerheader}>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <FlatList
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.messagesList}
         inverted
       />
       <View style={styles.inputContainer}>
@@ -97,69 +98,74 @@ const GeminiChat = () => {
           value={userInput}
           onSubmitEditing={sendMessage}
           style={styles.input}
-          placeholderTextColor="#fff"
+          placeholderTextColor="#999"
         />
-        {showStopIcon && (
-          <TouchableOpacity style={styles.stopIcon} onPress={clearMessages}>
-            <Entypo name="controller-stop" size={24} color="white" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+          <Entypo name="paper-plane" size={24} color="white" />
+        </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    backgroundColor: "rgba(255,159,71,0.4)",
-    height: 750
-   },
-  messageContainer: { padding: 10, marginVertical: 5 },
-  messageText: { fontSize: 16,color: 'white' },
-  inputContainer: { 
-    flexDirection: "row",
-    alignItems: "center", 
+  containerheader:{
+    height: '100%'
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "rgba(7,140,101,0.6)",
+    paddingTop: 40,
+    height: 850
+  },
+  messagesList: {
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+  },
+  messageText: {
+    fontSize: 16,
+    color: 'white',
+  },
+  userMessageContainer: {
+    backgroundColor: "rgba(7,140,101,0.2)",
+    borderRadius: 20,
     padding: 10,
+    marginVertical: 5,
+    alignSelf: "flex-end",
+    maxWidth: '80%',
+  },
+  botMessageContainer: {
+    backgroundColor: "rgba(7,140,101,0.1)",
+    borderRadius: 20,
+    padding: 10,
+    marginVertical: 5,
+    alignSelf: "flex-start",
+    maxWidth: '80%',
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(7,140,101,0.6)",
+    backgroundColor: "rgba(7,140,101,0.6)",
   },
   input: {
+    flex: 1,
     padding: 10,
-    backgroundColor: "rgba(255,159,10,1)",
-    borderRadius: 10,
-    height: 50,
+    backgroundColor: "rgba(7,140,101,0.5)",
+    borderRadius: 20,
     color: "white",
-    width: '90%',
-    margin: 'auto'
+    marginRight: 10,
   },
-  micIcon: {
+  sendButton: {
+    backgroundColor: "rgba(7,140,101,1)",
     padding: 10,
-    backgroundColor: "#131314",
-    borderRadius: 25,
-    height: 50,
-    width: 50,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 5,
   },
-  stopIcon: {
-    padding: 10,
-    backgroundColor: "red",
-    borderRadius: 25,
-    height: 50,
-    width: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3,
-  },
-  userMessage:{
-    color: '#ffff'
-  },
-  scroll:{
-    backgroundColor:'rgba(255,159,71,1)',
-    height: '100%'
-  }
 });
 
 export default GeminiChat;
-
-
