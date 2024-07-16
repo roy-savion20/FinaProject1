@@ -1,4 +1,4 @@
-import {  MongoClient } from "mongodb";
+import {  MongoClient, ObjectId } from "mongodb";
 import { Costumer, credit } from "./Costumer.type";
 
 const DB_INFO = {
@@ -64,6 +64,42 @@ export async function updateDoc(card1 : credit) {
             { _id: card1.id },
             {$set: {payment: card1}}
         );
+    } catch (error) {
+        throw error;
+    }
+    finally{
+        mongo.close();
+    }
+}
+
+export async function Updateuserinfo(user : Costumer) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        await mongo.connect();
+
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
+            {_id: user.id},
+            {$set: user}
+        )
+
+
+    } catch (error) {
+        throw error
+    }
+    finally{
+        mongo.close();
+    }
+}
+
+export async function NewPassfunc(password:string,id:ObjectId) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
+            {_id: id},
+            {$set: {password: password}}
+        )
     } catch (error) {
         throw error;
     }

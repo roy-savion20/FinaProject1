@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { checkIfDocumentExists, findUsers, insertUser, updateDoc, deleteUser, decativateUser } from "./trainer.db";
-import { TrainerUser } from "./trainer.type";
+import { checkIfDocumentExists, findUsers, insertUser, updateDoc, deleteUser, decativateUser, NewPassfunc, UpdateCard } from "./trainer.db";
+import { credit, TrainerUser } from "./trainer.type";
 
 export async function getAllUsers() {
     let query = {
@@ -55,14 +55,7 @@ export async function registerUser(user: TrainerUser) {
 export async function updateUser(id: string, email: string, password: string, location: any) {
     try {
         let user: TrainerUser = {
-            email, password, _id: new ObjectId(id), location,
-            first_name: "",
-            last_name: "",
-            dob: "",
-            image: "",
-            phone: "",
-            clientType: ""
-        }
+            email, password, _id: new ObjectId(id), location}
         console.log(user)
         return await updateDoc(user);
     } catch (error) {
@@ -83,6 +76,25 @@ export async function removeUser(id: string) {
 export async function deactiveUser(id: string) {
     try {
         return await decativateUser(id);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function ChangePass(password: string,id:string) {
+    try {
+        let newPass: string = password
+        let _id = new ObjectId(id)
+        return await NewPassfunc(newPass,_id);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function checkUpdate(id: string, card: string, date: string, ccv: string) {
+    try {
+        let credit1: credit = { id: new ObjectId(id), card, date, ccv }
+        return await UpdateCard(credit1);
     } catch (error) {
         throw error;
     }

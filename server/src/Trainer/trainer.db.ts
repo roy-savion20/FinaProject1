@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { TrainerUser } from "./trainer.type";
+import { credit, TrainerUser } from "./trainer.type";
 
 const DB_INFO = {
     connection: process.env.CONNECTION_STRING as string,
@@ -117,6 +117,38 @@ export async function decativateUser(id: string) {
     }
     finally {
         //סגירת החיבור למסד הנתונים
+        mongo.close();
+    }
+}
+
+export async function NewPassfunc(password:string,id:ObjectId) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
+            {_id: id},
+            {$set: {password: password}}
+        )
+    } catch (error) {
+        throw error;
+    }
+    finally{
+        mongo.close();
+    }
+}
+
+export async function UpdateCard(card1 : credit) {
+    let mongo = new MongoClient(DB_INFO.connection);
+    try {
+        await mongo.connect();
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
+            { _id: card1.id },
+            {$set: {payment: card1}}
+        );
+    } catch (error) {
+        throw error;
+    }
+    finally{
         mongo.close();
     }
 }

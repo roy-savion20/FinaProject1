@@ -3,9 +3,9 @@ import { ObjectId } from "mongodb";
 export type Costumer = {
     id?: ObjectId,
     name : string,
-    email : string,
+    email? : string,
     location?: string,
-    password : string,
+    password? : string,
     dogBreed? : string,
     payment?: credit,
 }

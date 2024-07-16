@@ -1,7 +1,7 @@
 import { Request,Response } from "express";
 import { Costumer } from "./Costumer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
-import { checkUpdate, findcostumerbyID, getallcostumers1, logincost, regCostumer } from "./Costumer.model";
+import { ChangePass, CheckInfo, checkUpdate, findcostumerbyID, getallcostumers1, logincost, regCostumer } from "./Costumer.model";
 import { ObjectId } from "mongodb";
 
 export async function GetAllCostumrs(req: Request, res : Response) {
@@ -84,6 +84,44 @@ export async function updatePayment(req: Request, res: Response) {
 
     try {
         let result = await checkUpdate(id,card,date,ccv);
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function UpdateInfo(req: Request, res: Response) {
+    let { id } = req.params;
+    let { name,location,dogBreed } = req.body;
+    
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!name || !location || !dogBreed)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await CheckInfo(id,name,location,dogBreed);
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+}
+
+export async function UpdatePassword(req: Request, res: Response) {
+    let { id } = req.params;
+    let { password } = req.body;
+    
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!password)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        password = encryptPassword(password);
+        let result = await ChangePass(password,id);
         res.status(200).json({ result })
     } catch (error) {
         res.status(500).json({ error })
