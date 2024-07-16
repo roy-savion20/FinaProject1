@@ -32,6 +32,8 @@ const chartConfig = {
   barPercentage: 0.5,
 };
 
+  
+
   return (
     <SafeAreaView>
       <ScrollView>

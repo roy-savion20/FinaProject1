@@ -1,45 +1,25 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { TrainerContext } from '../context/TrainerContextProvider';
 import { useFormik } from 'formik';
-import { CoustumerType } from '../types/coustumer_type';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { TrainerType } from '../types/trainer_type';
 
-import { launchImageLibrary } from 'react-native-image-picker';
-
-export default function SignUpCustomer() {
+export default function UpdateInfo() {
   const navigation = useNavigation();
+  const { AddTrainer } = useContext(TrainerContext);
   const [isFocus, setIsFocus] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
-  const [imagePath, setImagePath] = useState<string | null>(null);
-
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
-
-  //uTjkWs9yoK3tW4RV
-
-  // Updated function to handle image picking
-  const handleImageChange = () => {
-    launchImageLibrary({ mediaType: 'photo', quality: 0.5 }, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorMessage) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const asset = response.assets[0];
-        setImagePath(asset.uri || '');
-        formik.setFieldValue('image', asset.uri); // Save the image path in formik state
-      }
-    });
-  };
-
 
   const formik = useFormik({
     initialValues: {
@@ -49,10 +29,10 @@ export default function SignUpCustomer() {
       password: '',
       dob: '',
       location: '',
+      experience: '',
       image: '',
       phone: '',
-      update_details: '',
-      clientType: '2'
+      clientType: '1'
     },
     validate: (values) => {
       const errors: any = {};
@@ -76,9 +56,11 @@ export default function SignUpCustomer() {
         errors.email = 'Required';
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email format';
-      } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
+      } // בודק שהכתובת שהוזמנה נרשמה אך ורק באנגלית
+       else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
         errors.email = 'Email must be in English';
       }
+
 
       if (!values.password) {
         errors.password = 'Required';
@@ -96,8 +78,8 @@ export default function SignUpCustomer() {
         if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
           age--;
         }
-        if (age < 16 || age > 120) {
-          errors.dob = 'Age must be between 16 and 120 years';
+        if (age < 18 || age > 100) {
+          errors.dob = 'Age must be between 18 and 100 years';
         }
       }
 
@@ -105,6 +87,12 @@ export default function SignUpCustomer() {
         errors.location = 'Required';
       } else if (values.location.length < 2) {
         errors.location = 'Location must be at least 2 characters';
+      }
+
+      if (!values.experience) {
+        errors.experience = 'Required';
+      } else if (isNaN(Number(values.experience))) {
+        errors.experience = 'Experience must be a number';
       }
 
       if (!values.image) {
@@ -117,14 +105,10 @@ export default function SignUpCustomer() {
         errors.phone = 'Phone number must be in the format 05X-XXXXXXX';
       }
 
-      if (!values.update_details) {
-        errors.update_details = 'Required';
-      }
-
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
-      const NewUser: Partial<CoustumerType> = values;
+      const NewUser: Partial<TrainerType> = values;
       console.log(values);
       resetForm();
       if (NewUser.email !== '') {
@@ -136,7 +120,7 @@ export default function SignUpCustomer() {
   const onDateChange = (event: Event, selectedDate: Date) => {
     if (event.type === "set") {
       const currentDate = selectedDate || new Date();
-      const formattedDate = currentDate.toISOString().split('T')[0];
+      const formattedDate = currentDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
       formik.setFieldValue('dob', formattedDate);
     }
     setShowDatePicker(false);
@@ -236,23 +220,16 @@ export default function SignUpCustomer() {
           <Text style={styles.error}>{formik.errors.location}</Text>
         ) : null}
 
-
-
-        {/* <View style={styles.buttonContainer}>
-          <View style={styles.buttonNext}>
-            <TouchableOpacity onPress={handleImageChange} style={styles.link}>
-              <Text style={styles.TextButton}>Pick Image</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.dateInput}>
-          <Text style={styles.dateText}>
-            {formik.values.image ? formik.values.image : "Select Your Image"}
-          </Text>
-        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Your Image URL"
+          onChangeText={formik.handleChange('image')}
+          onBlur={formik.handleBlur('image')}
+          value={formik.values.image}
+        />
         {formik.touched.image && formik.errors.image ? (
           <Text style={styles.error}>{formik.errors.image}</Text>
-        ) : null} */}
+        ) : null}
 
         <TextInput
           style={styles.input}
@@ -265,15 +242,37 @@ export default function SignUpCustomer() {
           <Text style={styles.error}>{formik.errors.phone}</Text>
         ) : null}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Update Details"
-          onChangeText={formik.handleChange('update_details')}
-          onBlur={formik.handleBlur('update_details')}
-          value={formik.values.update_details}
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Experience' : '...'}
+          searchPlaceholder="Search..."
+          value={formik.values.experience}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            formik.setFieldValue('experience', item.value);
+            setIsFocus(false);
+          }}
+          renderLeftIcon={() => (
+            <AntDesign
+              style={styles.icon}
+              color={isFocus ? 'blue' : 'black'}
+              name="Safety"
+              size={20}
+            />
+          )}
         />
-        {formik.touched.update_details && formik.errors.update_details ? (
-          <Text style={styles.error}>{formik.errors.update_details}</Text>
+        {formik.touched.experience && formik.errors.experience ? (
+          <Text style={styles.error}>{formik.errors.experience}</Text>
         ) : null}
 
         <View style={styles.buttonNext}>
@@ -281,25 +280,14 @@ export default function SignUpCustomer() {
             <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.dotcontainer}>
-          <View style={styles.dot1}></View>
-          <View style={styles.dot2}></View>
-          <View style={styles.dot3}></View>
-          <View style={styles.dot4}></View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-  },
-  buttonContainer: {
-    flexDirection: "row"
   },
   scrollViewContent: {
     alignItems: 'center',
@@ -377,7 +365,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 40,
-    borderColor: 'rgba(255,159,71,0.8)',
+    borderColor: 'rgba(2,71,56,0.8)',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
