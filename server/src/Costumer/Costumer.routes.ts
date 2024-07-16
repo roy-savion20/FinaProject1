@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { GetAllCostumrs, getCostumerById, LoginCostumer, RegisterCostumer } from "./Costumer.controler";
+import { GetAllCostumrs, getCostumerById, LoginCostumer, RegisterCostumer, updatePayment } from "./Costumer.controler";
+
+
 
 const CostumerRouter = Router();
 
@@ -8,5 +10,6 @@ CostumerRouter
     .get('/:id/', getCostumerById)
     .post('/login',LoginCostumer)
     .post('/register', RegisterCostumer)
+    .put('/updatePayment/:id', updatePayment)
 
 export default CostumerRouter;

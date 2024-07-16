@@ -54,7 +54,15 @@ export async function registerUser(user: TrainerUser) {
 
 export async function updateUser(id: string, email: string, password: string, location: any) {
     try {
-        let user: TrainerUser = { email, password, _id : new ObjectId(id),location }
+        let user: TrainerUser = {
+            email, password, _id: new ObjectId(id), location,
+            first_name: "",
+            last_name: "",
+            dob: "",
+            image: "",
+            phone: "",
+            clientType: ""
+        }
         console.log(user)
         return await updateDoc(user);
     } catch (error) {

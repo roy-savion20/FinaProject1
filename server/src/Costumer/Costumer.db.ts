@@ -1,5 +1,5 @@
 import {  MongoClient } from "mongodb";
-import { Costumer } from "./Costumer.type";
+import { Costumer, credit } from "./Costumer.type";
 
 const DB_INFO = {
     connection: process.env.CONNECTION_STRING  as string,
@@ -9,7 +9,6 @@ const DB_INFO = {
 
 export async function findCostumer(query = {} , projection = {}) {
     let mongo = new MongoClient(DB_INFO.connection);
-
     try {
         await mongo.connect();
 
@@ -42,6 +41,7 @@ export async function checkifexists(query = {}) {
 
 export async function addcostumer(costumer: Costumer) {
     let mongo = new MongoClient(DB_INFO.connection);
+    console.log(costumer.id)
     try {
         //התחברות למסד הנתונים
         await mongo.connect();
@@ -52,6 +52,22 @@ export async function addcostumer(costumer: Costumer) {
     }
     finally {
         //סגירת החיבור למסד הנתונים
+        mongo.close();
+    }
+}
+
+export async function updateDoc(card1 : credit) {
+    let mongo = new MongoClient(DB_INFO.connection);
+    try {
+        await mongo.connect();
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
+            { _id: card1.id },
+            {$set: {payment: card1}}
+        );
+    } catch (error) {
+        throw error;
+    }
+    finally{
         mongo.close();
     }
 }

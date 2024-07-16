@@ -7,5 +7,12 @@ export type Costumer = {
     location?: string,
     password : string,
     dogBreed? : string,
-    Payment? : string
+    payment?: credit,
+}
+
+export type credit = {
+    id? :ObjectId
+    card: string,
+    date: string,
+    ccv: string
 }

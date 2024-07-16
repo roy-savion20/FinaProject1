@@ -1,7 +1,8 @@
 import { Request,Response } from "express";
 import { Costumer } from "./Costumer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
-import { findcostumerbyID, getallcostumers1, logincost, regCostumer } from "./Costumer.model";
+import { checkUpdate, findcostumerbyID, getallcostumers1, logincost, regCostumer } from "./Costumer.model";
+import { ObjectId } from "mongodb";
 
 export async function GetAllCostumrs(req: Request, res : Response) {
     try {
@@ -51,13 +52,13 @@ export async function LoginCostumer(req: Request, res: Response) {
 }
 
 export async function RegisterCostumer(req : Request, res: Response) {
-    let { name , email , location , password , dogBreed, Payment } = req.body
+    let { name , email , location , password , dogBreed, payment } = req.body
 
     if(!name || !password || !email)
         return res.status(400).json({ message: 'mossing info' })
     try {
         password = encryptPassword(password);
-        let costumer : Costumer = { name , email , location , password , dogBreed, Payment }
+        let costumer : Costumer = { name , email , location , password , dogBreed, payment }
         let result = await regCostumer(costumer)
         console.log(result)
         if(!result.insertedId)
@@ -66,6 +67,24 @@ export async function RegisterCostumer(req : Request, res: Response) {
             costumer.id = result.insertedId;
             res.status(201).json({ costumer }) 
         }
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function updatePayment(req: Request, res: Response) {
+    let { id } = req.params
+    let { card, date, ccv } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!card || !date || !ccv)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await checkUpdate(id,card,date,ccv);
+        res.status(200).json({ result })
     } catch (error) {
         res.status(500).json({ error })
     }
