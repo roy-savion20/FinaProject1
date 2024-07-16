@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser, ChangePass, checkUpdate } from "./trainer.model";
+import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser, ChangePass, checkUpdate, AddDate, DeleteDate } from "./trainer.model";
 import { TrainerUser } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
 
@@ -149,6 +149,43 @@ export async function updatePayment(req: Request, res: Response) {
 
     try {
         let result = await checkUpdate(id,card,date,ccv);
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function AddNewDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await AddDate(date,time,id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+}
+
+export async function RemoveDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await DeleteDate(date, time, id)
         res.status(200).json({ result })
     } catch (error) {
         res.status(500).json({ error })
