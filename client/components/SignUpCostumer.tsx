@@ -27,6 +27,7 @@ export default function SignUpCustomer() {
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
