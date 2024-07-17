@@ -12,8 +12,7 @@ export type TrainerUser = {
     image?: string,
     phone?: string,
     clientType?:string, // 1 for trainer 2 for costumer
-    payment?: credit,
-    openDates?: Dates[]
+    payment?: credit
 } 
 
 export type credit = {
@@ -21,10 +20,4 @@ export type credit = {
     card: string,
     date: string,
     ccv: string
-}
-
-export type Dates = {
-    id?: ObjectId,
-    date:string,
-    time: string
 }
