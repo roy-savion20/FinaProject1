@@ -10,7 +10,7 @@ import { TrainerType } from '../types/trainer_type';
 import { CoustumerType } from '../types/coustumer_type';
 
 
-// react-native-creditcard
+
 // # Connection for yuval - eMcWHJbuAdzLwDEf
 export default function Payment(NewUser: any) {
   const { AddTrainer } = useContext(TrainerContext);
@@ -19,9 +19,6 @@ export default function Payment(NewUser: any) {
   const route = useRoute();
   const [isFocus, setIsFocus] = useState(false);
   const [value, setValue] = useState('');
-  
-  // לשנות את האופציות של השנים שהוא יהיה דינמי לפי השנה הנוכחית 
-  // לפי השנה 2024
   const data = [
     { label: '2024', value: '2024' },
     { label: '2025', value: '2025' },
@@ -99,8 +96,7 @@ export default function Payment(NewUser: any) {
           image: NewUser.image,
           phone: NewUser.phone,
           clientType: NewUser.clientType,
-          payment: payment,
-          stayLogIn: false,
+          payment: payment
         }
         AddTrainer(NewTrainer);
         console.log('New Trainer: ' + NewTrainer);
@@ -238,12 +234,6 @@ export default function Payment(NewUser: any) {
           <TouchableOpacity onPress={() => formik.handleSubmit()} style={styles.link}>
             <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.dotcontainer}>
-          <View style={styles.dot1}></View>
-          <View style={styles.dot2}></View>
-          <View style={styles.dot3}></View>
-          <View style={styles.dot4}></View>
         </View>
       </SafeAreaView>
     </>

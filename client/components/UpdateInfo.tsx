@@ -1,27 +1,21 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
+import { TrainerContext } from '../context/TrainerContextProvider';
 import { useFormik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TrainerType } from '../types/trainer_type';
 
-export default function SignUpTrainer() {
+export default function UpdateInfo() {
   const navigation = useNavigation();
+  const { AddTrainer } = useContext(TrainerContext);
   const [isFocus, setIsFocus] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const data = [
-    { label: '0 - 2 years', value: '1' },
-    { label: '2 - 4 years', value: '2' },
-    { label: '4 - 6 years', value: '3' },
-    { label: '6 - 8 years', value: '4' },
-    { label: '8 - 10 years', value: '5' },
-    { label: '10 - 12 years', value: '6' },
-    { label: '12 + years', value: '7' }
-  ];
+  const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
@@ -63,7 +57,7 @@ export default function SignUpTrainer() {
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email format';
       } // בודק שהכתובת שהוזמנה נרשמה אך ורק באנגלית
-      else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
+       else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/i.test(values.email)) {
         errors.email = 'Email must be in English';
       }
 
@@ -285,12 +279,6 @@ export default function SignUpTrainer() {
           <TouchableOpacity onPress={() => formik.handleSubmit()} style={styles.link}>
             <Text style={styles.TextButton}>Next</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.dotcontainer}>
-          <View style={styles.dot1}></View>
-          <View style={styles.dot2}></View>
-          <View style={styles.dot3}></View>
-          <View style={styles.dot4}></View>
         </View>
       </ScrollView>
     </SafeAreaView>

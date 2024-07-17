@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, Button } from 'react-native';
+import React, { useState, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -7,8 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useFormik } from 'formik';
 import { CoustumerType } from '../types/coustumer_type';
+import CameraComponent from './Camera';
+import * as ImagePicker from 'expo-image-picker';
+import { CameraView, useCameraPermissions, CameraProps } from 'expo-camera';
+import requestCameraPermissionsAsync from 'expo-camera';
 
-import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function SignUpCustomer() {
   const navigation = useNavigation();
@@ -17,26 +20,29 @@ export default function SignUpCustomer() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const data = [{ label: '0 - 2 years', value: '1' }, { label: '2 - 4 years', value: '2' }, { label: '4 - 6 years', value: '3' }, { label: '6 - 8 years', value: '4' }, { label: '8 - 10 years', value: '5' }, { label: '10 - 12 years', value: '6' }, { label: '12 + years', value: '7' }];
 
-  const [imagePath, setImagePath] = useState<string | null>(null);
+  const [galleryImg, setGalleryImg] = useState<string[]>([]);
+  const [cameraOpen, setCameraOpen] = useState(false);
+
 
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
   };
-
-  // Updated function to handle image picking
-  const handleImageChange = () => {
-    launchImageLibrary({ mediaType: 'photo', quality: 0.5 }, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorMessage) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const asset = response.assets[0];
-        setImagePath(asset.uri || '');
-        formik.setFieldValue('image', asset.uri); // Save the image path in formik state
-      }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
+    console.log(result);
+    if (!result.canceled) {
+      setGalleryImg([...galleryImg, result.assets[0].uri]);
+      formik.setFieldValue('image', result.assets[0].uri);
+      return result.assets[0].uri;
+    }
   };
+
+
 
 
   const formik = useFormik({
@@ -115,6 +121,11 @@ export default function SignUpCustomer() {
         errors.phone = 'Phone number must be in the format 05X-XXXXXXX';
       }
 
+      if (values.phone.length == 3) {
+        values.phone += '-';
+        console.log('values.phone', values.phone)
+      }
+
       if (!values.update_details) {
         errors.update_details = 'Required';
       }
@@ -131,6 +142,7 @@ export default function SignUpCustomer() {
     }
   });
 
+  // expo calender - אולי יפתור את עיניין בחירת התאריך לידה
   const onDateChange = (event: Event, selectedDate: Date) => {
     if (event.type === "set") {
       const currentDate = selectedDate || new Date();
@@ -223,6 +235,7 @@ export default function SignUpCustomer() {
           />
         )}
 
+        {/* TOMTOM - ספרייה אשר אמורה להשלים אוטומטי את הכתובת */}
         <TextInput
           style={styles.input}
           placeholder="Enter Your Location"
@@ -234,15 +247,20 @@ export default function SignUpCustomer() {
           <Text style={styles.error}>{formik.errors.location}</Text>
         ) : null}
 
-
-
-        {/* <View style={styles.buttonContainer}>
+        {/*באתרי קורסים אצל יעל שיעור מספר 6 ו8 סוגר את הפינה של מצלמה והעלת תמונות */}
+        <View style={styles.buttonContainer}>
           <View style={styles.buttonNext}>
-            <TouchableOpacity onPress={handleImageChange} style={styles.link}>
+            <TouchableOpacity onPress={pickImage} style={styles.link}>
               <Text style={styles.TextButton}>Pick Image</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.buttonNext}>
+            <TouchableOpacity onPress={() => setCameraOpen(true)} style={styles.link}>
+              <Text style={styles.TextButton}>Open Camera</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        {cameraOpen && <CameraComponent />}
         <View style={styles.dateInput}>
           <Text style={styles.dateText}>
             {formik.values.image ? formik.values.image : "Select Your Image"}
@@ -250,7 +268,7 @@ export default function SignUpCustomer() {
         </View>
         {formik.touched.image && formik.errors.image ? (
           <Text style={styles.error}>{formik.errors.image}</Text>
-        ) : null} */}
+        ) : null}
 
         <TextInput
           style={styles.input}
@@ -308,6 +326,9 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 20,
     marginTop: 50
+  },
+  camera: {
+    flex: 1,
   },
   form: {
     flex: 1,
@@ -431,6 +452,9 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: '#63E381',
     borderRadius: 100,
+  },
+  cameraContainer: {
+    justifyContent: 'space-around'
   },
   dotcontainer: {
     flexDirection: 'row',

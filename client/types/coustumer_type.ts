@@ -14,4 +14,12 @@ export type CoustumerType = {
         date: string,
         ccv: string
     }
+    stayLogIn?: boolean;
+    trainingSchedule?:[
+        {
+            name?: string, // שם המאמן
+            date: Date, // תאריך האימון
+            time: string, // יש להזין מאיזה שעה לאיזה שעה
+        }
+    ]
 }

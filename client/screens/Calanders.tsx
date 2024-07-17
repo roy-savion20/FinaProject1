@@ -31,7 +31,7 @@ export default function Calanders() {
         <Text style={styles.texthead}>Choose When You Want To Work</Text>
       </View>
       <Image
-            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwz_L0tKaK7Ni3mvOkA7uGfvbe2yesmHV5fQ&s'}}
+            source={(require('../assets/2.png'))}
             style={styles.mainImage}
       />
       <View style={styles.container}>

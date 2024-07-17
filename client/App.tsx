@@ -20,6 +20,9 @@ import LogIn from './screens/LogIn';
 import Calanders from './screens/Calanders';
 import Posts from './screens/Posts';
 import back from './components/Bording1';
+import UpdateInfo from './components/UpdateInfo';
+import UpdatePayment from './components/UpdatePayment';
+import Membership from './components/Membership';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -40,7 +43,7 @@ const Stack = createStackNavigator();
             tabBarIcon: () => <MaterialCommunityIcons name='wechat' size={35} color='#1DBD7B'/>
         }} />
           <Tab.Screen name="Settings" component={Settings}  options={{tabBarLabel: 'Settings',
-            headerShown: false,
+            headerShown: true,
             tabBarIcon: () => <Feather name="settings" size={24} color="#1DBD7B" />
         }} />
     </Tab.Navigator>
@@ -59,6 +62,9 @@ function StackNav() {
       <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: true }} />
       <Stack.Screen name="Calander" component={Calanders} options={{ headerShown: true }} />
       <Stack.Screen name="Posts" component={Posts} options={{ headerShown: true }} />
+      <Stack.Screen name="Update Info" component={UpdateInfo} options={{ headerShown: true }} />
+      <Stack.Screen name="Update Payment" component={UpdatePayment} options={{ headerShown: true }} />
+      <Stack.Screen name="Mambership" component={Membership} options={{ headerShown: true }} />
       <Stack.Screen name="Back" component={Back} options={{ headerShown: false }} />
     </Stack.Navigator>
   );

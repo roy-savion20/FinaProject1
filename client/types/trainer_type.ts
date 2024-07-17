@@ -8,11 +8,19 @@ export type TrainerType = {
     experience: string,
     image: string,
     phone: string,
-    clientType:string, // 1 for trainer 2 for costumer
+    clientType: string, // 1 for trainer 2 for costumer
     payment: {
         card: string,
         date: string,
         ccv: string
     }
+    stayLogIn?: boolean;
+    training?: [
+        {
+            name?: string, // שם הלקוח
+            date: Date, // תאריך האימון
+            time: string, // יש להזין מאיזה שעה לאיזה שעה
+        }
+    ]
 }
 

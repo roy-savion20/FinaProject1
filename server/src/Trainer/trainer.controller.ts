@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser } from "./trainer.model";
+import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser, ChangePass, checkUpdate, AddDate, DeleteDate } from "./trainer.model";
 import { TrainerUser } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
 
@@ -82,6 +82,7 @@ export async function update(req: Request, res: Response) {
         return res.status(400).json({ message: 'must provide an email and full_name' });
 
     try {
+        password = encryptPassword(password);
         let result = await updateUser(id, email, password, location);
         res.status(201).json({ result });
     } catch (error) {
@@ -116,6 +117,81 @@ export async function logicDeleteUser(req: Request, res: Response) {
         res.status(500).json({ error });
     }
 }
+
+export async function UpdatePassword(req: Request, res: Response) {
+    let { id } = req.params;
+    let { password } = req.body;
+    
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!password)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        password = encryptPassword(password);
+        let result = await ChangePass(password,id);
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function updatePayment(req: Request, res: Response) {
+    let { id } = req.params
+    let { card, date, ccv } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!card || !date || !ccv)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await checkUpdate(id,card,date,ccv);
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+export async function AddNewDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await AddDate(date,time,id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+}
+
+export async function RemoveDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await DeleteDate(date, time, id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
 
 
 
