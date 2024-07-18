@@ -27,3 +27,16 @@ server.use('/api/admin', AdminRouter)
 
 //הפעלת השרת
 server.listen(PORT, () => { console.log(`[SERVER] running... http://localhost:${PORT}`) })
+
+
+// חובה לעלות את הפרויקט  render.com 
+// בשביל לבדוק אם שמירת המשתמש החדש במונגו עובד
+// fetch ללמוד על פעולת
+
+// לא להוסיף בדיקה על תמונה
+// ליצור פונקצייה שתבדוק אותה בנפרד
+// in register
+
+
+
+

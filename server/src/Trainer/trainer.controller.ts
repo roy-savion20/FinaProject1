@@ -50,6 +50,8 @@ export async function login(req: Request, res: Response) {
     }
 }
 
+
+
 export async function register(req: Request, res: Response) {
     let { first_name, last_name, email, password, dob, location, experience, image, phone, clientType, payment } = req.body;
     if (!first_name || !last_name || !email || !password || !dob || !location || !experience || !image || !phone || !clientType || !payment)
