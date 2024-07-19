@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { credit, Dates, TrainerUser } from "./trainer.type";
+import { credit, Dates, Post, TrainerUser } from "./trainer.type";
 
 const DB_INFO = {
     connection: process.env.CONNECTION_STRING as string,
@@ -20,6 +20,23 @@ export async function findUsers(query = {}, projection = {}) {
         //ביצוע שאילתה
         let users = await mongo.db(DB_INFO.name).collection(DB_INFO.collection).find(query, { projection }).toArray();
         return users;
+    } catch (error) {
+        throw error;
+    }
+    finally {
+        //סגירת החיבור למסד הנתונים
+        mongo.close();
+    }
+}
+
+export async function FindAllPosts(query = {}, projection = {}) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        //התחברות למסד הנתונים
+        await mongo.connect();
+        //ביצוע שאילתה
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).find(query, { projection }).toArray();
     } catch (error) {
         throw error;
     }
@@ -105,6 +122,11 @@ export async function decativateUser(id: string) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         //התחברות למסד הנתונים
+        /* `await mongo.connect();` is a statement that connects to the MongoDB database using the
+        MongoClient instance `mongo`. The `await` keyword is used to wait for the connection to be
+        established before proceeding with further operations on the database. This ensures that the
+        connection is successfully established before executing any queries or operations on the
+        database. */
         await mongo.connect();
         //עדכון המשתמש
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
@@ -117,6 +139,27 @@ export async function decativateUser(id: string) {
     }
     finally {
         //סגירת החיבור למסד הנתונים
+        mongo.close();
+    }
+}
+
+
+//? לבדוק מול שי איך מוחקים אובייקט ממערך 
+export async function decativatePost(id: string,title:string) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        await mongo.connect();
+
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
+            { _id: new ObjectId(id) },
+            { $addToSet: { Posts: { title: title } } }
+        );
+
+    } catch (error) {
+        throw error
+    }
+    finally{
         mongo.close();
     }
 }
@@ -186,3 +229,35 @@ export async function declareDate(date: Dates, id: ObjectId) {
         mongo.close();
     }
 }
+
+export async function addonePost(post: Post,) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        await mongo.connect();
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
+            {_id: post.id},
+            {$addToSet: {Posts: post}}
+
+        )
+    } catch (error) {
+        throw error;
+    }
+    finally{
+        mongo.close();
+    }
+}
+
+export async function checkmongopostbyid(query : {}, projection = {}) {
+    let mongo = new MongoClient(DB_INFO.connection);
+
+    try {
+        return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).findOne(query, { projection });
+    } catch (error) {
+        throw error;
+    }
+    finally{
+        mongo.close();
+    }
+}
+

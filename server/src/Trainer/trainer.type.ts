@@ -13,7 +13,8 @@ export type TrainerUser = {
     phone?: string,
     clientType?:string, // 1 for trainer 2 for costumer
     payment?: credit,
-    openDates?: Dates[]
+    openDates?: Dates[],
+    Posts?: Post[]
 } 
 
 export type credit = {
@@ -27,4 +28,11 @@ export type Dates = {
     id?: ObjectId,
     date:string,
     time: string
+}
+
+export type Post = {
+    id?: ObjectId
+    title: string,
+    description: string,
+    image?: string
 }

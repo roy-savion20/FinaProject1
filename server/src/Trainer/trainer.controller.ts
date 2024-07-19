@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser, ChangePass, checkUpdate } from "./trainer.model";
+import { getAllUsers, findUserById, loginUser, registerUser, updateUser, removeUser, deactiveUser, ChangePass, checkUpdate, addAnotherPost, showallpostsbyid, getAllPosts1, deactivePost, AddDate, DeleteDate } from "./trainer.model";
 import { TrainerUser } from "./trainer.type";
 import { decryptPassword, encryptPassword } from "../utils/utils";
+import { ObjectId } from "mongodb";
 
 export async function getAll(req: Request, res: Response) {
     try {
@@ -159,4 +160,103 @@ export async function updatePayment(req: Request, res: Response) {
 
 
 
+export async function addNewPost(req: Request, res: Response) {
+    let { id } = req.params
+    let { title,description,image } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!title || !description)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await addAnotherPost(title,description,image,id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    } 
+}
+
+export async function getAllPostsById(req: Request, res: Response) {
+    let { id } = req.params
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    try {
+        let result = await showallpostsbyid(id)
+        if(!result)
+            res.status(400).json({msg: "there is no posts"})
+        else
+            res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
+
+
+export async function showallposts(req: Request, res: Response) {
+    try {
+        let posts = await getAllPosts1();
+        if (posts?.length == 0)
+            res.status(200).json({ message: 'empty posts', posts });
+        else
+            res.status(200).json({ posts });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+}
+
+export async function deletePost(req: Request, res: Response) {
+    let { id } = req.params
+    let { title } = req.body
+
+    if (!id || id.length < 24)
+        return res.status(400).json({ message: 'must provide a valid id' });
+
+    try {
+        let result = await deactivePost(id,title);
+        res.status(201).json({ result });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+}
+
+export async function AddNewDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await AddDate(date,time,id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+}
+
+export async function RemoveDate(req: Request, res: Response) {
+    let { id } = req.params
+    let { date,time } = req.body
+
+    if(!id || id.length < 24)
+        return res.status(400).json({ msg: "invalid id" })
+
+    if(!date || !time)
+        return res.status(400).json({ msg: "invalid info" })
+
+    try {
+        let result = await DeleteDate(date, time, id)
+        res.status(200).json({ result })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+}
 
