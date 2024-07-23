@@ -106,7 +106,7 @@ export async function deleteUser(id: string) {
         await mongo.connect();
         //מחיקת המשתמש
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).deleteOne(
-            {_id: new ObjectId(id)}
+            { _id: new ObjectId(id) }
         );
 
     } catch (error) {
@@ -121,14 +121,8 @@ export async function deleteUser(id: string) {
 export async function decativateUser(id: string) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
-        //התחברות למסד הנתונים
-        /* `await mongo.connect();` is a statement that connects to the MongoDB database using the
-        MongoClient instance `mongo`. The `await` keyword is used to wait for the connection to be
-        established before proceeding with further operations on the database. This ensures that the
-        connection is successfully established before executing any queries or operations on the
-        database. */
         await mongo.connect();
-        //עדכון המשתמש
+
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
             { _id: new ObjectId(id) },
             { $set: { isActive: false } }
@@ -144,8 +138,8 @@ export async function decativateUser(id: string) {
 }
 
 
-//? לבדוק מול שי איך מוחקים אובייקט ממערך 
-export async function decativatePost(id: string,title:string) {
+
+export async function decativatePost(id: string, title: string) {
     let mongo = new MongoClient(DB_INFO.connection);
 
     try {
@@ -153,45 +147,46 @@ export async function decativatePost(id: string,title:string) {
 
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
             { _id: new ObjectId(id) },
-            { $addToSet: { Posts: { title: title } } }
+            { $pull: {'Posts': {'title': title}} as any }
+            //{ $pull: { 'openDates': date } as any}
         );
 
     } catch (error) {
         throw error
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
 
-export async function NewPassfunc(password:string,id:ObjectId) {
+export async function NewPassfunc(password: string, id: ObjectId) {
     let mongo = new MongoClient(DB_INFO.connection);
 
     try {
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
-            {_id: id},
-            {$set: {password: password}}
+            { _id: id },
+            { $set: { password: password } }
         )
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
 
-export async function UpdateCard(card1 : credit) {
+export async function UpdateCard(card1: credit) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         await mongo.connect();
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
             { _id: card1.id },
-            {$set: {payment: card1}}
+            { $set: { payment: card1 } }
         );
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
@@ -202,13 +197,13 @@ export async function newdates(date: Dates, id: ObjectId) {
     try {
         await mongo.connect();
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
-            {_id:id},
-            {$addToSet: {openDates: date}}
+            { _id: id },
+            { $addToSet: { openDates: date } }
         )
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
@@ -219,13 +214,13 @@ export async function declareDate(date: Dates, id: ObjectId) {
     try {
         await mongo.connect()
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
-            {_id: id},
-            { $unset: { openDates: { date: date } } }
+            { _id: id },
+            { $pull: { 'openDates': date } as any}
         )
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
@@ -236,19 +231,19 @@ export async function addonePost(post: Post,) {
     try {
         await mongo.connect();
         return await mongo.db(DB_INFO.name).collection(DB_INFO.collection).updateOne(
-            {_id: post.id},
-            {$addToSet: {Posts: post}}
+            { _id: post.id },
+            { $addToSet: { Posts: post } }
 
         )
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
 
-export async function checkmongopostbyid(query : {}, projection = {}) {
+export async function checkmongopostbyid(query: {}, projection = {}) {
     let mongo = new MongoClient(DB_INFO.connection);
 
     try {
@@ -256,7 +251,7 @@ export async function checkmongopostbyid(query : {}, projection = {}) {
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }

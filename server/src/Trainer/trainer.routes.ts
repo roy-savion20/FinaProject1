@@ -17,7 +17,7 @@ TrainerRouter
     .post('/addnewpost/:id', addNewPost)
     .get('/getallpostsbyid/:id',getAllPostsById)
     .post('/showallposts',showallposts)
-    .delete('/deletePost/:id', deletePost)
+    .put('/deletePost/:id', deletePost)
     .post('/addnewdates/:id', AddNewDate)
     .put('/removedate/:id', RemoveDate)
 
