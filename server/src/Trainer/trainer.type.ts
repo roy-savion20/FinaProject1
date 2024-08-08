@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb"
+import { ObjectId, PullAllOperator } from "mongodb"
 
 export type TrainerUser = {
     _id?: ObjectId,
