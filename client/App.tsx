@@ -3,7 +3,6 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Bording1 from './components/Bording1';
 import { createStackNavigator } from '@react-navigation/stack';
 import Bording2 from './components/Bording2';
 import SignUpCostumer from './components/SignUpCostumer';
@@ -15,19 +14,20 @@ import Profile from './screens/Profile';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Chat from './components/Chat';
 import Settings from './screens/Settings';
-import allCostumers from './screens/allCostumers';
+import AllCostumers from './screens/AllCostumers';
 import LogIn from './screens/LogIn';
 import Calanders from './screens/Calanders';
 import Posts from './screens/Posts';
-import back from './components/Bording1';
+import Bording1 from './components/Bording1';
 import UpdateInfo from './components/UpdateInfo';
 import UpdatePayment from './components/UpdatePayment';
 import Membership from './components/Membership';
+import CoustumerContextProvider from './context/CoustumerContextProvider';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
- function Back() {
+ function BackToPre() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="HomePage" component={HomePage} options={{tabBarLabel: 'Home',
@@ -53,19 +53,19 @@ const Stack = createStackNavigator();
 function StackNav() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="back" component={back} options={{ headerShown: false }} />
+      <Stack.Screen name="Bording1" component={Bording1} options={{ headerShown: false }} />
       <Stack.Screen name="Bording2" component={Bording2} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpCostumer" component={SignUpCostumer} options={{ headerShown: false }} />
       <Stack.Screen name="SignUpTrainer" component={SignUpTrainer} options={{ headerShown: false }} />
       <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }} />
       <Stack.Screen name="LogIn" component={LogIn} options={{ headerShown: true }} />
-      <Stack.Screen name="allCostumers" component={allCostumers} options={{ headerShown: true }} />
+      <Stack.Screen name="AllCostumers" component={AllCostumers} options={{ headerShown: true }} />
       <Stack.Screen name="Calander" component={Calanders} options={{ headerShown: true }} />
       <Stack.Screen name="Posts" component={Posts} options={{ headerShown: true }} />
       <Stack.Screen name="Update Info" component={UpdateInfo} options={{ headerShown: true }} />
       <Stack.Screen name="Update Payment" component={UpdatePayment} options={{ headerShown: true }} />
       <Stack.Screen name="Mambership" component={Membership} options={{ headerShown: true }} />
-      <Stack.Screen name="Back" component={Back} options={{ headerShown: false }} />
+      <Stack.Screen name="BackToPre" component={BackToPre} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -73,9 +73,11 @@ function StackNav() {
 export default function App() {
   return (
     <TrainerContextProvider>
+      <CoustumerContextProvider>
       <NavigationContainer>
         <StackNav />
       </NavigationContainer>
+      </CoustumerContextProvider>
     </TrainerContextProvider>
   );
 }

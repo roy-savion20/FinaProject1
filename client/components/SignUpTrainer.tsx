@@ -7,8 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TrainerType } from '../types/trainer_type';
-
+import { Cloudinary } from "@cloudinary/url-gen";
+import CameraComponent from './Camera';
+import * as ImagePicker from 'expo-image-picker';
+const cld = new Cloudinary({
+  cloud: {
+      cloudName: 'demo'
+  }
+});
 export default function SignUpTrainer() {
+  const [galleryImg, setGalleryImg] = useState<string[]>([]);
+  const [cameraOpen, setCameraOpen] = useState(false);
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -22,6 +31,21 @@ export default function SignUpTrainer() {
     { label: '10 - 12 years', value: '6' },
     { label: '12 + years', value: '7' }
   ];
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.canceled) {
+      setGalleryImg([...galleryImg, result.assets[0].uri]);
+      formik.setFieldValue('image', result.assets[0].uri);
+      return result.assets[0].uri;
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setVisiblePassword(!visiblePassword);
@@ -226,13 +250,26 @@ export default function SignUpTrainer() {
           <Text style={styles.error}>{formik.errors.location}</Text>
         ) : null}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Your Image URL"
-          onChangeText={formik.handleChange('image')}
-          onBlur={formik.handleBlur('image')}
-          value={formik.values.image}
-        />
+         {/*באתרי קורסים אצל יעל שיעור מספר 6 ו8 סוגר את הפינה של מצלמה והעלת תמונות */}
+         <View style={styles.buttonContainer}>
+          <View style={styles.buttonNext}>
+            <TouchableOpacity onPress={pickImage} style={styles.link}>
+              <Text style={styles.TextButton}>Pick Image</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonNext}>
+            <TouchableOpacity onPress={() => setCameraOpen(true)} style={styles.link}>
+              <Text style={styles.TextButton}>Open Camera</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {cameraOpen && <CameraComponent />}
+        <View style={styles.dateInput}>
+          <Text style={styles.dateText}>
+            {formik.values.image ? formik.values.image : "Select Your Image"}
+          </Text>
+        </View>
+        <Image source={{ uri: formik.values.image }} style={styles.imageStyle} />
         {formik.touched.image && formik.errors.image ? (
           <Text style={styles.error}>{formik.errors.image}</Text>
         ) : null}
@@ -298,8 +335,15 @@ export default function SignUpTrainer() {
 }
 
 const styles = StyleSheet.create({
+  imageStyle: {
+    width: 250,
+    aspectRatio: 4 / 3,
+  },
   safeArea: {
     flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row"
   },
   scrollViewContent: {
     alignItems: 'center',
@@ -310,6 +354,9 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 20,
     marginTop: 50
+  },
+  camera: {
+    flex: 1,
   },
   form: {
     flex: 1,
@@ -377,7 +424,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 40,
-    borderColor: 'rgba(2,71,56,0.8)',
+    borderColor: 'rgba(255,159,71,0.8)',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
@@ -433,6 +480,9 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: '#63E381',
     borderRadius: 100,
+  },
+  cameraContainer: {
+    justifyContent: 'space-around'
   },
   dotcontainer: {
     flexDirection: 'row',

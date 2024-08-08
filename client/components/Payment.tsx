@@ -6,20 +6,20 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import { TrainerContext } from '../context/TrainerContextProvider';
-import { TrainerType } from '../types/trainer_type';
 import { CoustumerType } from '../types/coustumer_type';
+import { CoustumerContext } from '../context/CoustumerContextProvider';
 
 
 // react-native-creditcard
 // # Connection for yuval - eMcWHJbuAdzLwDEf
-export default function Payment(NewUser: any) {
-  const { AddTrainer } = useContext(TrainerContext);
-  const { AddCoustumer } = useContext(TrainerContext);
+export default function Payment() {
+  const { RegisterNewTrainer } = useContext(TrainerContext);
+  const { RegisterNewCoustumer, currentCoustumer } = useContext(CoustumerContext);
   const navigation = useNavigation();
-  const route = useRoute();
+
   const [isFocus, setIsFocus] = useState(false);
   const [value, setValue] = useState('');
-  
+
   // לשנות את האופציות של השנים שהוא יהיה דינמי לפי השנה הנוכחית 
   // לפי השנה 2024
   const data = [
@@ -80,52 +80,65 @@ export default function Payment(NewUser: any) {
       return errors;
     },
     onSubmit: (values, { resetForm }) => {
+      console.log('first==>', values, 'NewUser==>', currentCoustumer);
       const payment: any = {
         card: values.card,
         date: values.year + '-' + values.month,
         cvv: values.cvv
       }
       // console.log('TrainerInfo:', JSON.stringify(TrainerInfo, null, 2)); // Updated to display values
-      if (NewUser.clientType == '1') {
-        console.log('TrainerInfo:', JSON.stringify(NewUser, null, 2)); // Updated to display values
-        const NewTrainer: TrainerType = {
-          first_name: NewUser.first_name,
-          last_name: NewUser.last_name,
-          email: NewUser.email,
-          password: NewUser.password,
-          dob: NewUser.dob,
-          location: NewUser.location,
-          experience: NewUser.experience,
-          image: NewUser.image,
-          phone: NewUser.phone,
-          clientType: NewUser.clientType,
+      // if (NewUser.clientType == '1') {
+      //   console.log('TrainerInfo:', JSON.stringify(NewUser, null, 2)); // Updated to display values
+      //   const NewTrainer: any = {
+      //     first_name: NewUser.first_name,
+      //     last_name: NewUser.last_name,
+      //     email: NewUser.email,
+      //     password: NewUser.password,
+      //     dob: NewUser.dob,
+      //     location: NewUser.location,
+      //     experience: NewUser.experience,
+      //     image: NewUser.image,
+      //     phone: NewUser.phone,
+      //     clientType: NewUser.clientType,
+      //     payment: payment,
+      //     stayLogIn: false,
+      //   }
+      //   let u = RegisterNewTrainer(NewTrainer);
+      //   console.log('New Trainer: ' + NewTrainer);
+      //   console.log("u ===> " + u);
+      // }
+      // else 
+      if (currentCoustumer.clientType == '2') {
+        console.log('CustomerInfo:', JSON.stringify(currentCoustumer, null, 2)); // Updated to display values
+        const NewCustomer: CoustumerType = {
+          dogBreed: '',
+          first_name: currentCoustumer.first_name,
+          last_name: currentCoustumer.last_name,
+          email: currentCoustumer.email,
+          password: currentCoustumer.password,
+          dob: currentCoustumer.dob,
+          location: currentCoustumer.location,
+          image: currentCoustumer.image,
+          phone: currentCoustumer.phone,
+          update_details: currentCoustumer.update_details,
+          clientType: currentCoustumer.clientType,
           payment: payment,
           stayLogIn: false,
+          trainingSchedule:[
+            {
+              name: '',
+              date: new Date(),
+              time: ''
+            }
+          ]
         }
-        AddTrainer(NewTrainer);
-        console.log('New Trainer: ' + NewTrainer);
-      }
-      else if (NewUser.clientType == '2') {
-        console.log('CustomerInfo:', JSON.stringify(NewUser, null, 2)); // Updated to display values
-        const NewCustomer: CoustumerType = {
-          first_name: NewUser.first_name,
-          last_name: NewUser.last_name,
-          email: NewUser.email,
-          password: NewUser.password,
-          dob: NewUser.dob,
-          location: NewUser.location,
-          image: NewUser.image,
-          phone: NewUser.phone,
-          clientType: NewUser.clientType,
-          update_details:NewUser.update_details,
-          payment: payment
-        }
-        AddCoustumer(NewCustomer);
+        let u = RegisterNewCoustumer(NewCustomer);
         console.log('New Customer: ' + NewCustomer);
+        console.log("u ===> " + u);
       }
       resetForm();
       if (payment.card) {
-        navigation.navigate('Back');
+        navigation.navigate('BackToPre');
       }
     }
   });
@@ -343,29 +356,29 @@ const styles = StyleSheet.create({
     width: 150,
     margin: 'auto',
   },
-    dot1:{
-      width:25,
-      height:25,
-      backgroundColor:'#63E381',
-      borderRadius: 100,
+  dot1: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
+    borderRadius: 100,
   },
-  dot2:{
-      width:25,
-      height:25,
-      backgroundColor:'#63E381',
-      borderRadius: 100,
+  dot2: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
+    borderRadius: 100,
   },
-  dot3:{
-      width:25,
-      height:25,
-      backgroundColor:'#63E381',
-      borderRadius: 100,
+  dot3: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#63E381',
+    borderRadius: 100,
   },
-  dot4:{
-      width:25,
-      height:25,
-      backgroundColor:'#024738',
-      borderRadius: 100,
+  dot4: {
+    width: 25,
+    height: 25,
+    backgroundColor: '#024738',
+    borderRadius: 100,
   },
   error: {
     fontSize: 12,

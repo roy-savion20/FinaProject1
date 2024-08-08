@@ -1,24 +1,24 @@
-import {  MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { Costumer, credit } from "./Costumer.type";
 
 const DB_INFO = {
-    connection: process.env.CONNECTION_STRING  as string,
+    connection: process.env.CONNECTION_STRING as string,
     name: process.env.DB_NAME,
-    Collection : 'Costumers'
+    Collection: 'Costumers'
 }
 
-export async function findCostumer(query = {} , projection = {}) {
+export async function findCostumer(query = {}, projection = {}) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         await mongo.connect();
 
-        let costumers = await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).find(query, {projection}).toArray();
+        let costumers = await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).find(query, { projection }).toArray();
         return costumers
 
     } catch (error) {
         throw error
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
@@ -41,69 +41,65 @@ export async function checkifexists(query = {}) {
 
 export async function addcostumer(costumer: Costumer) {
     let mongo = new MongoClient(DB_INFO.connection);
-    console.log(costumer.id)
+    costumer.id = new ObjectId();
     try {
-        //התחברות למסד הנתונים
         await mongo.connect();
-        //הוספת המשתמש למאגר
         return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).insertOne(costumer);
     } catch (error) {
         throw error;
-    }
-    finally {
-        //סגירת החיבור למסד הנתונים
+    } finally {
         mongo.close();
     }
 }
 
-export async function updateDoc(card1 : credit) {
+export async function updateDoc(card1: credit) {
     let mongo = new MongoClient(DB_INFO.connection);
     try {
         await mongo.connect();
         return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
             { _id: card1.id },
-            {$set: {payment: card1}}
+            { $set: { payment: card1 } }
         );
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
 
-export async function Updateuserinfo(user : Costumer) {
+export async function Updateuserinfo(user: Costumer) {
     let mongo = new MongoClient(DB_INFO.connection);
 
     try {
         await mongo.connect();
 
         return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
-            {_id: user.id},
-            {$set: user}
+            { _id: user.id },
+            { $set: user }
         )
 
 
     } catch (error) {
         throw error
     }
-    finally{
+    finally {
         mongo.close();
     }
 }
 
-export async function NewPassfunc(password:string,id:ObjectId) {
+export async function NewPassfunc(password: string, id: ObjectId) {
     let mongo = new MongoClient(DB_INFO.connection);
 
     try {
         return await mongo.db(DB_INFO.name).collection(DB_INFO.Collection).updateOne(
-            {_id: id},
-            {$set: {password: password}}
+            { _id: id },
+            { $set: { password: password } }
         )
     } catch (error) {
         throw error;
     }
-    finally{
+    finally {
         mongo.close();
     }
 }

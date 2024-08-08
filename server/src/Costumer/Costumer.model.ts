@@ -35,30 +35,32 @@ export async function logincost(email: string) {
 
 export async function regCostumer(costumer: Costumer) {
     try {
-        let query = { email: costumer.email }
-        let costumerExists = await checkifexists(query)
-        if (costumerExists > 0) {
-            console.log('costumerExists', costumerExists);
-            throw new Error("email already exists")
+        let query = { email: costumer.email };
+        let CostumerExists = await checkifexists(query);
+
+        if (CostumerExists > 0) {
+            console.log('CostumerExists', CostumerExists);
+            throw new Error("email already exists");
         }
-        return await addcostumer(costumer)
+
+        return await addcostumer(costumer);
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
-export async function checkUpdate(id: string, card: string, date: string, ccv: string) {
+export async function checkUpdate(id: string, card: string, date: string, cvv: string) {
     try {
-        let credit1: credit = { id: new ObjectId(id), card, date, ccv }
+        let credit1 = { id: new ObjectId(id), card, date, cvv }
         return await updateDoc(credit1);
     } catch (error) {
         throw error;
     }
 }
 
-export async function CheckInfo(id:string,name:string,location:string,dogBreed:string) {
+export async function CheckInfo(id:string,first_name:string,last_name:string,email:string,phone:string,dob:string,image:string,update_details:string,clientType:string,location:string,password:string,payment:credit) {
     try {
-        let updateuser : Costumer = {id : new ObjectId(id), name,location,dogBreed};
+        let updateuser : Costumer = {id : new ObjectId(id),first_name,last_name,email,phone,dob,image,update_details,clientType,location,password,payment};
         return await Updateuserinfo(updateuser)
     } catch (error) {
         throw error;

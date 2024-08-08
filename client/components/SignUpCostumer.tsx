@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, Button } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -12,8 +12,23 @@ import * as ImagePicker from 'expo-image-picker';
 import { CameraView, useCameraPermissions, CameraProps } from 'expo-camera';
 import requestCameraPermissionsAsync from 'expo-camera';
 
+import { AdvancedImage } from 'cloudinary-react-native';
+import { Cloudinary } from "@cloudinary/url-gen";
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: 'demo'
+  }
+});
+
+import { CoustumerContext } from '../context/CoustumerContextProvider';
 
 export default function SignUpCustomer() {
+
+  const {setCurrentCoustumer} = useContext<any>(CoustumerContext);
+
+  // Use the image with public ID, 'picture'.
+  const myImage = cld.image('picture');
+
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -42,8 +57,6 @@ export default function SignUpCustomer() {
       return result.assets[0].uri;
     }
   };
-
-
 
 
   const formik = useFormik({
@@ -138,7 +151,8 @@ export default function SignUpCustomer() {
       console.log(values);
       resetForm();
       if (NewUser.email !== '') {
-        navigation.navigate("Payment", { NewUser });
+        setCurrentCoustumer(NewUser);
+        navigation.navigate("Payment");
       }
     }
   });
@@ -267,6 +281,7 @@ export default function SignUpCustomer() {
             {formik.values.image ? formik.values.image : "Select Your Image"}
           </Text>
         </View>
+        <Image source={{ uri: formik.values.image }} style={styles.imageStyle} />
         {formik.touched.image && formik.errors.image ? (
           <Text style={styles.error}>{formik.errors.image}</Text>
         ) : null}
@@ -312,6 +327,10 @@ export default function SignUpCustomer() {
 
 
 const styles = StyleSheet.create({
+  imageStyle: {
+    width: 250,
+    aspectRatio: 4 / 3,
+  },
   safeArea: {
     flex: 1,
   },

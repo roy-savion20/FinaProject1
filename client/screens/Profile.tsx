@@ -50,7 +50,7 @@ const chartConfig = {
             <Text style={styles.TextContainer}>Stats</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('allCostumers')}>
+        <TouchableOpacity onPress={() => navigation.navigate('AllCostumers')}>
         <View style={styles.StatesContainer}>
             <Text style={styles.TextContainer}>costumers</Text>
           </View>

@@ -121,7 +121,7 @@ export default function Payment(NewUser: any) {
       }
       resetForm();
       if (payment.card) {
-        navigation.navigate('Back');
+        navigation.navigate('BackToPre');
       }
     }
   });

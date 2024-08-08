@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function allCostumers() {
+export default function AllCostumers() {
   return (
     <View>
-      <Text>allCostumers</Text>
+      <Text>AllCostumers</Text>
     </View>
   )
 }

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-export default function back() {
+export default function Bording1() {
     const navigation = useNavigation()
    
 

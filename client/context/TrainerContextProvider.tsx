@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { TrainerType } from "../types/trainer_type";
+import { POST } from "../api";
 
 export const TrainerContext = createContext<any>({});
 
@@ -9,13 +10,26 @@ export default function TrainerContextProvider({ children }: any) {
     const [currentTrainer, setCurrentTrainer] = useState<TrainerType | undefined>();
 
 
-    const AddNewTrainer = (newTrainer: TrainerType) => {
+    async function RegisterNewCoustumer(newTrainer: TrainerType) {
+        let TrainerToAdd = { newTrainer };
         try {
-            setAllTrainer([...allTrainer, newTrainer]);
-            return true
-        } catch (error) {
-            console.log(error)
-            return false
+            let res = await fetch('https://finaproject1-1ghw.onrender.com/api/trainer/register', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(TrainerToAdd)
+            });
+            if (!res.ok) {
+                console.log({ res });
+                return;
+            }
+            return true;
+
+        }
+        catch (error) {
+            console.log(error);
+            return false;
         }
     }
 
@@ -25,7 +39,7 @@ export default function TrainerContextProvider({ children }: any) {
             value={{
                 allTrainer,
                 currentTrainer,
-                AddNewTrainer
+                RegisterNewCoustumer
             }}>
             {children}
         </TrainerContext.Provider>

@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 7777;
 
 //מייצר את אובייקט השרת
 const server = express();
-
+ 
 //הגדרת יכולות שונות
 server.use(express.json()); //json עבודה עם 
 server.use(cors()); //רשימת הכתובות שיכולות לגשת לשרת
